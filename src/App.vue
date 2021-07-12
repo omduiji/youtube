@@ -1,16 +1,20 @@
 <template>
   <div id="app">
-    <MainPage></MainPage>
+    <!-- <MainPage></MainPage> -->
+    <Header></Header>
+    <router-view/>
   </div>
 </template>
 <script>
 // @ is an alias to /src
-import MainPage from '@/components/mainPage.vue';
+// import MainPage from '@/components/mainPage.vue';
+import Header from './components/header.vue';
 
 export default {
   name: 'Home',
   components: {
-    MainPage,
+    // MainPage,
+    Header,
   },
 };
 </script>

@@ -1,18 +1,30 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <!-- <Header></Header> -->
+    <Filters></Filters>
+    <Channel></Channel>
+    <VideosList v-for="i in 10" :key="i"></VideosList>
+    <LoadMore></LoadMore>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+// import Header from '@/components/header.vue';
+import Filters from '@/components/filters.vue';
+import Channel from '@/components/channel.vue';
+import VideosList from '@/components/videosList.vue';
+import LoadMore from '@/components/loadMore.vue';
 
 export default {
-  name: 'Home',
+  name: 'Main',
   components: {
-    HelloWorld
-  }
-}
+    // Header,
+    Filters,
+    Channel,
+    VideosList,
+    LoadMore,
+  },
+};
 </script>
+
+<style></style>

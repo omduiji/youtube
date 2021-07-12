@@ -3,7 +3,7 @@
     <header class="nav__header">
       <Youtube class="nav__header__logo"></Youtube>
       <form class="nav__form">
-        <input type="text" class="nav__form__input" />
+        <input type="text" class="nav__form__input" placeholder="YouTube"/>
         <SearchIcon class="nav__form__icon"></SearchIcon>
       </form>
     </header>
@@ -46,6 +46,9 @@ export default {
       font-size: clamp(1rem, 1.2rem, 3rem)
       padding: .5em
       outline: none
+      &::placeholder
+        color: white
+        fontweight: 400
     &__icon
       width: clamp(1.5rem, 1.7rem, 3rem)
 </style>
