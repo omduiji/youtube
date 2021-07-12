@@ -3,7 +3,7 @@
     <header class="nav__header">
       <Youtube class="nav__header__logo"></Youtube>
       <form class="nav__form">
-        <input type="text" class="nav__form__input" placeholder="YouTube"/>
+        <input type="text" class="nav__form__input" placeholder="YouTube" />
         <SearchIcon class="nav__form__icon"></SearchIcon>
       </form>
     </header>
