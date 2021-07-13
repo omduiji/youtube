@@ -2,7 +2,7 @@
   <div>
     <!-- <Header></Header> -->
     <Filters></Filters>
-    <Channel></Channel>
+    <!-- <Channel></Channel> -->
     <VideosList v-for="i in 10" :key="i"></VideosList>
     <LoadMore></LoadMore>
   </div>
@@ -11,7 +11,7 @@
 <script>
 // import Header from '@/components/header.vue';
 import Filters from '@/components/filters.vue';
-import Channel from '@/components/channel.vue';
+// import Channel from '@/components/channel.vue';
 import VideosList from '@/components/videosList.vue';
 import LoadMore from '@/components/loadMore.vue';
 
@@ -20,7 +20,7 @@ export default {
   components: {
     // Header,
     Filters,
-    Channel,
+    // Channel,
     VideosList,
     LoadMore,
   },

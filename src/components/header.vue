@@ -1,7 +1,7 @@
 <template>
   <nav class="nav">
     <header class="nav__header">
-      <Youtube class="nav__header__logo"></Youtube>
+      <router-link to="/"><Youtube class="nav__header__logo" ></Youtube></router-link>
       <form class="nav__form">
         <input type="text" class="nav__form__input" placeholder="YouTube" />
         <SearchIcon class="nav__form__icon"></SearchIcon>
