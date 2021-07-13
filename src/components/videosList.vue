@@ -5,7 +5,7 @@
       <picture>
         <source :srcset='video.thumpnails.default.url' media="(min-width: 360px) and (max-width: 679px)">
         <source :srcset='video.thumpnails.medium.url' media="(min-width: 679px) and (max-width: 1027px)">
-        <source :srcset='video.thumpnails.high.url' media="(min-width: 1028px) and (max-width: 1480px)">
+        <source :srcset='video.thumpnails.medium.url' media="(min-width: 1028px) and (max-width: 1480px)">
         <img :src='video.thumpnails.default.url' alt="">
       </picture>
        
