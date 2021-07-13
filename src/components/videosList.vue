@@ -1,35 +1,44 @@
 <template>
-<div>
-  <article class="videos" v-for="video in videos" :key="video.id">
-    <div class="videos__img" :data-duration="video.duration">
-      <picture>
-        <source :srcset='video.thumpnails.default.url' media="(min-width: 360px) and (max-width: 679px)">
-        <source :srcset='video.thumpnails.medium.url' media="(min-width: 679px) and (max-width: 1027px)">
-        <source :srcset='video.thumpnails.medium.url' media="(min-width: 1028px) and (max-width: 1480px)">
-        <img :src='video.thumpnails.default.url' alt="">
-      </picture>
-       
-    </div>
-    <div class="videos__details">
-      <p class="videos__details__name">{{video.videoTitle}}</p>
-      <p class="videos__details__owner">{{video.channelTitle}}</p>
-      <p class="videos__details__views">{{video.views | viewsFilter}} views</p>
-      
-    </div>
-  </article>
-</div>
+  <div>
+    <article class="videos" v-for="video in videos" :key="video.id">
+      <div class="videos__img" :data-duration="video.duration">
+        <picture>
+          <source
+            :srcset="video.thumpnails.default.url"
+            media="(min-width: 360px) and (max-width: 679px)"
+          />
+          <source
+            :srcset="video.thumpnails.medium.url"
+            media="(min-width: 679px) and (max-width: 1027px)"
+          />
+          <source
+            :srcset="video.thumpnails.medium.url"
+            media="(min-width: 1028px) and (max-width: 2000px)"
+          />
+          <img :src="video.thumpnails.default.url" alt="" />
+        </picture>
+      </div>
+      <div class="videos__details">
+        <p class="videos__details__name">{{ video.videoTitle }}</p>
+        <p class="videos__details__owner">{{ video.channelTitle }}</p>
+        <p class="videos__details__views">
+          {{ video.views | viewsFilter }} views
+        </p>
+      </div>
+    </article>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
-    videos: []
+    videos: [],
   },
   filters: {
-    viewsFilter: function(value) {
-      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  }
+    viewsFilter: function (value) {
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+  },
 };
 </script>
 
@@ -40,7 +49,7 @@ export default {
   padding: .75em
   margin-bottom: .5em
   &__img
-    
+
     // border: 1px solid red
     position: relative
     &::after

@@ -1,15 +1,17 @@
 <template>
   <footer class="loadMore">
-    <button class="loadMore__btn">Show more items</button>
-    <Loader></Loader>
+    <button class="loadMore__btn" @click="loadMoareData">
+      Show more items
+    </button>
   </footer>
 </template>
 
 <script>
-import Loader from '@/components/loader.vue';
 export default {
-  components: {
-    Loader,
+  methods: {
+    loadMoareData() {
+      this.$emit('getMoreData');
+    },
   },
 };
 </script>
@@ -21,7 +23,7 @@ export default {
   justify-content: center
   flex-direction: column
   border-top: 1px solid #4c4c4c
-  padding: .5em 0
+  padding: .75em 0
   &__btn
     background-color: white
     border: none
