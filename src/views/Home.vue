@@ -3,8 +3,12 @@
     <Filters></Filters>
     <!-- <Channel></Channel> -->
     <VideosList :videos="videosList"></VideosList>
-    <LoadMore @getMoreData="getMoreData" v-show="loaderCompStatus"></LoadMore>
+    <LoadMore
+      @getMoreData="getMoreData"
+      v-show="loaderCompStatus && mobile"
+    ></LoadMore>
     <Loader v-show="!loaderCompStatus"></Loader>
+    <Observer @intersect="intersected" />
   </div>
 </template>
 
@@ -14,13 +18,16 @@ import Filters from '@/components/filters.vue';
 import VideosList from '@/components/videosList.vue';
 import LoadMore from '@/components/loadMore.vue';
 import Loader from '@/components/loader.vue';
+import Observer from '@/components/observer.vue';
 
 export default {
   name: 'Main',
   data() {
     return {
+      observer: null,
       loaderStatus: false,
       loaderCompStatus: true,
+      mobile: false,
       videosList: [],
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/videos?',
@@ -41,6 +48,7 @@ export default {
     VideosList,
     LoadMore,
     Loader,
+    Observer,
   },
   async created() {
     const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}`;
@@ -63,7 +71,13 @@ export default {
       console.log(err);
     }
   },
+
   methods: {
+    async intersected() {
+      console.log('intersected');
+      this.getMoreData();
+    },
+
     convertTime(duration) {
       let a = duration.match(/\d+/g);
 
