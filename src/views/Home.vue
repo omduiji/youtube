@@ -30,10 +30,10 @@ import VideosList from '@/components/videosList.vue';
 import LoadMore from '@/components/loadMore.vue';
 import Loader from '@/components/loader.vue';
 import Observer from '@/components/observer.vue';
-import { EventBus } from '../eventBus';
-const bus = EventBus.$on('search', (clickHandler) => {
-  console.log(clickHandler);
-});
+// import { EventBus } from '../eventBus';
+// const bus = EventBus.$on('search', (clickHandler) => {
+//   console.log(clickHandler);
+// });
 export default {
   name: 'Main',
   data() {
@@ -86,9 +86,9 @@ export default {
       console.log(err);
     }
   },
-  mounted() {
-    console.log(bus, 'bus');
-  },
+  // mounted() {
+  //   console.log(bus, 'bus');
+  // },
   methods: {
     async intersected() {
       // console.log('intersected');

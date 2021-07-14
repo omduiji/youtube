@@ -63,8 +63,7 @@ export default {
       outline: none
       cursor: pointer
       &:disabled
-        cursor:not-allowed
-
+        cursor: not-allowed
     &__input
       flex-grow: 1
       border: none

@@ -9,7 +9,7 @@
 // @ is an alias to /src
 // import MainPage from '@/components/mainPage.vue';
 import Header from './components/header.vue';
-import { EventBus } from './eventBus';
+// import { EventBus } from './eventBus';
 
 export default {
   name: 'Home',
@@ -19,7 +19,8 @@ export default {
   },
   methods: {
     getParams(params) {
-      EventBus.$emit('search', params);
+      // EventBus.$emit('search', params);
+      console.log(params);
     },
   },
 };
