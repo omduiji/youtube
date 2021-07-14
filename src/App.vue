@@ -12,6 +12,11 @@ import Header from './components/header.vue';
 // import { EventBus } from './eventBus';
 
 export default {
+  data(){
+    return {
+      
+    }
+  },
   name: 'Home',
   components: {
     // MainPage,
@@ -19,8 +24,8 @@ export default {
   },
   methods: {
     getParams(params) {
-      // EventBus.$emit('search', params);
-      console.log(params);
+      console.log(params)
+      
     },
   },
 };

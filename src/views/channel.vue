@@ -1,42 +1,51 @@
 <template>
   <div>
-    <main class="channelWrapper">
+    <Loader v-if="loaderCompStatus"></Loader>
+    <main class="channelWrapper" v-else>
       <header class="channelWrapper__header">
-        <img src="https://unsplash.it" alt="" />
+        <img :src="channelData.snippet.thumbnails.meduim.url" alt="" loading="lazy" decoding="async"/>
       </header>
       <section class="channelWrapper__body">
         <div class="channelWrapper__body__logo">
-          <img src="../assets/logo.png" alt="" />
+          <img :src="channelData.snippet.thumbnails.defualt.url" alt="" loading="lazy" decoding="async" />
         </div>
         <div class="channelWrapper__body__details">
           <h1 class="channelWrapper__body__details__title">
-            Spongebob Square Pants
+            {{channelData.snippet.title}}
           </h1>
           <div class="channelWrapper__body__details__subscripeBtn">
             <button>SUBSCRIBE</button>
-            <p>23000</p>
+            <p>{{channelData.statistics.subscriberCount}}</p>
           </div>
         </div>
       </section>
     </main>
+    
+
   </div>
 </template>
 
 <script>
+import Loader from "@/components/loader.vue";
+
 export default {
+    components: { Loader},
+
   data() {
     return {
+      loaderCompStatus: false,
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
         part: 'snippet,contentDetails,statistics',
-        key: 'AIzaSyCszfMFfakNsBScdp2QxYCWThQY-aO9MZI',
+        key: 'AIzaSyAoacmJKwfQNtZx6-TMjvpQ1_4HlDwkOFI',
         nextPageTokenSearch: '',
         maxResults: 25,
       },
       channelData: {},
     };
   },
-  async created() {
+  async mounted() {
+    this.loaderCompStatus = true
     const cahnnels = `${this.api.baseUrl}channels?part=${this.api.part}&key=${this.api.key}&id=${this.$route.params.id}`;
     const cahnnelsSections = `${this.api.baseUrl}channelSections?part=snippet,contentDetails&key=${this.api.key}&channelId=${this.$route.params.id}`;
     let res = await Promise.all([fetch(cahnnels), fetch(cahnnelsSections)]);
@@ -45,6 +54,8 @@ export default {
     );
     this.channelData = channelData.items[0];
     console.log(ownedChannels);
+    
+    this.loaderCompStatus = false
   },
 };
 </script>
@@ -54,7 +65,6 @@ export default {
   &__header
     background-color: yellow
     width: 100vw
-    height: 100px
   &__body
     position: relative
     &__logo

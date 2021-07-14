@@ -1,7 +1,10 @@
 <template>
   <div>
     <article class="videoContainer">
-      <div v-html="videoDetails.player.embedHtml"></div>
+      <div
+        v-html="videoDetails.player.embedHtml"
+        class="videoContainer__video"
+      ></div>
       <main class="videoContainer__details">
         <header class="videoContainer__details__header">
           <div class="videoContainer__details__header__data">
@@ -47,31 +50,33 @@
         </footer>
       </main>
     </article>
-    <VideosList
-      v-for="(video, index) in relatedVideos"
-      :key="index"
-      :duration="video.duration"
-      :smallScreenThumb="video.thumpnails.default.url"
-      :mediumScreenThumb="video.thumpnails.medium.url"
-      :largeScreenThumb="video.thumpnails.medium.url"
-      :title="video.videoTitle"
-      :channelTitle="video.channelTitle"
-      :viewsCount="video.views"
-      :videoId="video.id"
-    ></VideosList>
+    <div class="videoContainer__listVideos">
+      <VideosList
+        v-for="(video, index) in relatedVideos"
+        :key="index"
+        :duration="video.duration"
+        :smallScreenThumb="video.thumpnails.default.url"
+        :mediumScreenThumb="video.thumpnails.medium.url"
+        :largeScreenThumb="video.thumpnails.medium.url"
+        :title="video.videoTitle"
+        :channelTitle="video.channelTitle"
+        :viewsCount="video.views"
+        :videoId="video.id"
+      ></VideosList>
+    </div>
     <Observer @intersect="intersected" />
   </div>
 </template>
 
 <script>
-import VideosList from '@/components/videosList.vue';
-import FlagIcon from '@/assets/flag.svg';
-import PlusIcon from '@/assets/plus.svg';
-import ShareIcon from '@/assets/share.svg';
-import ThumpsUpIcon from '@/assets/thumps-up.svg';
-import ThumpsDownIcon from '@/assets/thumps-down.svg';
-import Arrow from '@/assets/arrow-down.svg';
-import Observer from '@/components/observer.vue';
+import VideosList from "@/components/videosList.vue";
+import FlagIcon from "@/assets/flag.svg";
+import PlusIcon from "@/assets/plus.svg";
+import ShareIcon from "@/assets/share.svg";
+import ThumpsUpIcon from "@/assets/thumps-up.svg";
+import ThumpsDownIcon from "@/assets/thumps-down.svg";
+import Arrow from "@/assets/arrow-down.svg";
+import Observer from "@/components/observer.vue";
 
 export default {
   data() {
@@ -80,10 +85,10 @@ export default {
       videoDetails: {},
       showFooter: false,
       api: {
-        baseUrl: 'https://www.googleapis.com/youtube/v3/',
-        part: 'snippet,contentDetails,statistics,player',
-        key: 'AIzaSyCszfMFfakNsBScdp2QxYCWThQY-aO9MZI',
-        nextPageTokenSearch: '',
+        baseUrl: "https://www.googleapis.com/youtube/v3/",
+        part: "snippet,contentDetails,statistics,player",
+        key: "AIzaSyAoacmJKwfQNtZx6-TMjvpQ1_4HlDwkOFI",
+        nextPageTokenSearch: "",
         maxResults: 25,
       },
     };
@@ -104,25 +109,24 @@ export default {
   methods: {
     routeToChannel() {
       this.$router.push({
-        name: 'Channel',
+        name: "Channel",
         params: { id: this.videoDetails.snippet.channelId },
       });
     },
     async intersected() {
-      console.log('enter');
       await this.getRelatedVideos();
     },
     async getRelatedVideos() {
       const { baseUrl, key, nextPageTokenSearch, maxResults } = this.api;
-      const part = 'snippet';
-      const type = 'video';
+      const part = "snippet";
+      const type = "video";
       const apiUrl = `${baseUrl}search?part=${part}&key=${key}&relatedToVideoId=${this.$route.params.id}&type=${type}&pageToken=${nextPageTokenSearch}&maxResults=${maxResults}`;
       try {
         let list = await fetch(apiUrl);
         let response = await list.json();
         let relatedVideosIds = response.items
           .map((item) => item.id.videoId)
-          .join(',');
+          .join(",");
         this.relatedVideos = [
           ...this.relatedVideos,
           ...(await this.listRelatedVideos(relatedVideosIds)),
@@ -158,20 +162,20 @@ export default {
       let a = duration.match(/\d+/g);
 
       if (
-        duration.indexOf('M') >= 0 &&
-        duration.indexOf('H') == -1 &&
-        duration.indexOf('S') == -1
+        duration.indexOf("M") >= 0 &&
+        duration.indexOf("H") == -1 &&
+        duration.indexOf("S") == -1
       ) {
         a = [0, a[0], 0];
       }
 
-      if (duration.indexOf('H') >= 0 && duration.indexOf('M') == -1) {
+      if (duration.indexOf("H") >= 0 && duration.indexOf("M") == -1) {
         a = [a[0], 0, a[1]];
       }
       if (
-        duration.indexOf('H') >= 0 &&
-        duration.indexOf('M') == -1 &&
-        duration.indexOf('S') == -1
+        duration.indexOf("H") >= 0 &&
+        duration.indexOf("M") == -1 &&
+        duration.indexOf("S") == -1
       ) {
         a = [a[0], 0, 0];
       }
@@ -198,9 +202,9 @@ export default {
       let m = Math.floor((duration % 3600) / 60);
       let s = Math.floor((duration % 3600) % 60);
 
-      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
-      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '';
-      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
+      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : "";
+      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : "";
+      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : "00";
       return hDisplay + mDisplay + sDisplay;
     },
   },
@@ -216,17 +220,27 @@ export default {
   },
   filters: {
     viewsFilter: function (value) {
-      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
 };
 </script>
 
 <style lang="sass">
+$medium: 900px
 .videoContainer
   padding: 0 2em
+  &__listVideos
+    @media (min-width: $medium)
+      padding: 1em 14em
+  @media (min-width: $medium)
+    padding: 0 15em
+    padding-top: 9em
   &__video
-      width: 100vw
+      width: 100%
+      iframe
+        width: 100%
+        height: 500px
   &__details
       display: flex
       flex-direction: column
