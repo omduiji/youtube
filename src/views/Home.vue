@@ -2,7 +2,18 @@
   <div>
     <Filters></Filters>
     <!-- <Channel></Channel> -->
-    <VideosList :videos="videosList"></VideosList>
+    <VideosList
+      v-for="(video, index) in videosList"
+      :key="index"
+      :duration="video.duration"
+      :smallScreenThumb="video.thumpnails.default.url"
+      :mediumScreenThumb="video.thumpnails.medium.url"
+      :largeScreenThumb="video.thumpnails.medium.url"
+      :title="video.videoTitle"
+      :channelTitle="video.channelTitle"
+      :viewsCount="video.views"
+      :videoId="video.id"
+    ></VideosList>
     <LoadMore
       @getMoreData="getMoreData"
       v-show="loaderCompStatus && mobile"
@@ -39,7 +50,7 @@ export default {
         order: 'viewCount',
         maxResults: 20,
         regionCode: 'US',
-        key: 'AIzaSyAgSOCGHxMsWtd0Dj7Mj6g8Dkg8ey0EQ3c',
+        key: 'AIzaSyCszfMFfakNsBScdp2QxYCWThQY-aO9MZI',
         prevPageToken: '',
         nextPageToken: '',
       },
@@ -60,7 +71,7 @@ export default {
     try {
       let list = await fetch(apiUrl);
       let response = await list.json();
-      let hydratedArray = response.items.map((item) => {
+      this.videosList = response.items.map((item) => {
         return {
           duration: this.convertTime(item.contentDetails.duration),
           id: item.id,
@@ -71,7 +82,6 @@ export default {
         };
       });
       this.api.nextPageToken = response.nextPageToken;
-      this.videosList = hydratedArray;
     } catch (err) {
       console.log(err);
     }
@@ -81,7 +91,7 @@ export default {
   },
   methods: {
     async intersected() {
-      console.log('intersected');
+      // console.log('intersected');
       this.getMoreData();
     },
 

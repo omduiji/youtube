@@ -1,33 +1,28 @@
 <template>
   <div>
-    <article class="videos" v-for="video in videos" :key="video.id">
-      <div class="videos__img" :data-duration="video.duration">
+    <article class="videos" @click="routeToVideo">
+      <div class="videos__img" :data-duration="duration">
         <picture>
           <source
-            :srcset="video.thumpnails.default.url"
+            :srcset="smallScreenThumb"
             media="(min-width: 360px) and (max-width: 679px)"
           />
           <source
-            :srcset="video.thumpnails.medium.url"
+            :srcset="mediumScreenThumb"
             media="(min-width: 679px) and (max-width: 1027px)"
           />
           <source
-            :srcset="video.thumpnails.medium.url"
+            :srcset="mediumScreenThumb"
             media="(min-width: 1028px) and (max-width: 2000px)"
           />
-          <img
-            :src="video.thumpnails.default.url"
-            alt=""
-            decoding="async"
-            loading="lazy"
-          />
+          <img :src="smallScreenThumb" alt="" decoding="async" loading="lazy" />
         </picture>
       </div>
       <div class="videos__details">
-        <p class="videos__details__name">{{ video.videoTitle }}</p>
-        <p class="videos__details__owner">{{ video.channelTitle }}</p>
+        <p class="videos__details__name">{{ title }}</p>
+        <p class="videos__details__owner">{{ channelTitle }}</p>
         <p class="videos__details__views">
-          {{ video.views | viewsFilter }} views
+          {{ viewsCount | viewsFilter }} views
         </p>
       </div>
     </article>
@@ -36,12 +31,31 @@
 
 <script>
 export default {
-  props: {
-    videos: [],
-  },
+  props: [
+    'duration',
+    'smallScreenThumb',
+    'mediumScreenThumb',
+    'largeScreenThumb',
+    'title',
+    'channelTitle',
+    'viewsCount',
+    'videoId',
+  ],
   filters: {
     viewsFilter: function (value) {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+  },
+  methods: {
+    routeToVideo() {
+      if (this.$route.name === 'Video') {
+        this.$route.params.id = this.videoId;
+        setTimeout(() => {
+          window.location.reload();
+        }, 0);
+        console.log(this.$route.params.id, 'sss');
+      }
+      this.$router.push({ name: 'Video', params: { id: this.videoId } });
     },
   },
 };
@@ -53,6 +67,7 @@ export default {
   align-items: stretch
   padding: .75em
   margin-bottom: .5em
+  cursor: pointer
   &__img
 
     // border: 1px solid red

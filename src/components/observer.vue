@@ -11,11 +11,7 @@ export default {
   mounted() {
     const options = this.options || {};
     this.observer = new IntersectionObserver(([entry]) => {
-      if (
-        entry &&
-        entry.isIntersecting &&
-        entry.boundingClientRect.top === window.innerHeight
-      ) {
+      if (entry && entry.isIntersecting && entry.intersectionRatio > 0) {
         this.$emit('intersect');
       }
     }, options);
