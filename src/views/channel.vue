@@ -23,7 +23,30 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      api: {
+        baseUrl: 'https://www.googleapis.com/youtube/v3/',
+        part: 'snippet,contentDetails,statistics',
+        key: 'AIzaSyCszfMFfakNsBScdp2QxYCWThQY-aO9MZI',
+        nextPageTokenSearch: '',
+        maxResults: 25,
+      },
+      channelData: {},
+    };
+  },
+  async created() {
+    const cahnnels = `${this.api.baseUrl}channels?part=${this.api.part}&key=${this.api.key}&id=${this.$route.params.id}`;
+    const cahnnelsSections = `${this.api.baseUrl}channelSections?part=snippet,contentDetails&key=${this.api.key}&channelId=${this.$route.params.id}`;
+    let res = await Promise.all([fetch(cahnnels), fetch(cahnnelsSections)]);
+    const [channelData, ownedChannels] = await Promise.all(
+      res.map((r) => r.json())
+    );
+    this.channelData = channelData.items[0];
+    console.log(ownedChannels);
+  },
+};
 </script>
 
 <style lang="sass">

@@ -18,7 +18,7 @@ const routes = [
     component: Video,
   },
   {
-    path: '/channel',
+    path: '/channel/:id',
     name: 'Channel',
     component: Channel,
   },

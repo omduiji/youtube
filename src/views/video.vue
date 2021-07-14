@@ -8,7 +8,10 @@
             <h1 class="videoContainer__details__header__title">
               {{ videoDetails.snippet.title }}
             </h1>
-            <p class="videoContainer__details__header__owner">
+            <p
+              class="videoContainer__details__header__owner"
+              @click="routeToChannel"
+            >
               {{ videoDetails.snippet.channelTitle }} .<span
                 class="videoContainer__details__header__views"
                 >{{
@@ -99,6 +102,12 @@ export default {
     await this.getRelatedVideos();
   },
   methods: {
+    routeToChannel() {
+      this.$router.push({
+        name: 'Channel',
+        params: { id: this.videoDetails.snippet.channelId },
+      });
+    },
     async intersected() {
       console.log('enter');
       await this.getRelatedVideos();
