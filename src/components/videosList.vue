@@ -15,7 +15,12 @@
             :srcset="video.thumpnails.medium.url"
             media="(min-width: 1028px) and (max-width: 2000px)"
           />
-          <img :src="video.thumpnails.default.url" alt="" />
+          <img
+            :src="video.thumpnails.default.url"
+            alt=""
+            decoding="async"
+            loading="lazy"
+          />
         </picture>
       </div>
       <div class="videos__details">

@@ -19,7 +19,10 @@ import VideosList from '@/components/videosList.vue';
 import LoadMore from '@/components/loadMore.vue';
 import Loader from '@/components/loader.vue';
 import Observer from '@/components/observer.vue';
-
+import { EventBus } from '../eventBus';
+const bus = EventBus.$on('search', (clickHandler) => {
+  console.log(clickHandler);
+});
 export default {
   name: 'Main',
   data() {
@@ -42,6 +45,7 @@ export default {
       },
     };
   },
+
   components: {
     Filters,
     // Channel,
@@ -50,6 +54,7 @@ export default {
     Loader,
     Observer,
   },
+
   async created() {
     const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}`;
     try {
@@ -71,7 +76,9 @@ export default {
       console.log(err);
     }
   },
-
+  mounted() {
+    console.log(bus, 'bus');
+  },
   methods: {
     async intersected() {
       console.log('intersected');

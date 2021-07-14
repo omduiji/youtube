@@ -1,10 +1,19 @@
 <template>
   <nav class="nav">
     <header class="nav__header">
-      <router-link to="/"><Youtube class="nav__header__logo" ></Youtube></router-link>
+      <router-link to="/"
+        ><Youtube class="nav__header__logo"></Youtube
+      ></router-link>
       <form class="nav__form">
-        <input type="text" class="nav__form__input" placeholder="YouTube" />
-        <SearchIcon class="nav__form__icon"></SearchIcon>
+        <input
+          type="text"
+          class="nav__form__input"
+          placeholder="YouTube"
+          v-model="search"
+        />
+        <button @click.prevent="getSearchQuery" :disabled="!search">
+          <SearchIcon class="nav__form__icon"></SearchIcon>
+        </button>
       </form>
     </header>
   </nav>
@@ -16,6 +25,16 @@ import SearchIcon from '@/assets/search.svg';
 
 export default {
   components: { Youtube, SearchIcon },
+  data() {
+    return {
+      search: '',
+    };
+  },
+  methods: {
+    getSearchQuery() {
+      this.$emit('getSearchParams', this.search);
+    },
+  },
 };
 </script>
 
@@ -38,6 +57,14 @@ export default {
     justify-content: flex-start
     flex-grow: 1
     margin-right: .5em
+    button
+      background-color: transparent
+      border: none
+      outline: none
+      cursor: pointer
+      &:disabled
+        cursor:not-allowed
+
     &__input
       flex-grow: 1
       border: none
