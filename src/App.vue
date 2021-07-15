@@ -12,10 +12,8 @@ import Header from './components/header.vue';
 // import { EventBus } from './eventBus';
 
 export default {
-  data(){
-    return {
-      
-    }
+  data() {
+    return {};
   },
   name: 'Home',
   components: {
@@ -24,8 +22,7 @@ export default {
   },
   methods: {
     getParams(params) {
-      console.log(params)
-      
+      this.$router.push({ name: 'Search', params: { query: params } });
     },
   },
 };

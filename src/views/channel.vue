@@ -3,33 +3,41 @@
     <Loader v-if="loaderCompStatus"></Loader>
     <main class="channelWrapper" v-else>
       <header class="channelWrapper__header">
-        <img :src="channelData.snippet.thumbnails.meduim.url" alt="" loading="lazy" decoding="async"/>
+        <img
+          :src="channelData.snippet.thumbnails.meduim.url"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
       </header>
       <section class="channelWrapper__body">
         <div class="channelWrapper__body__logo">
-          <img :src="channelData.snippet.thumbnails.defualt.url" alt="" loading="lazy" decoding="async" />
+          <img
+            :src="channelData.snippet.thumbnails.defualt.url"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <div class="channelWrapper__body__details">
           <h1 class="channelWrapper__body__details__title">
-            {{channelData.snippet.title}}
+            {{ channelData.snippet.title }}
           </h1>
           <div class="channelWrapper__body__details__subscripeBtn">
             <button>SUBSCRIBE</button>
-            <p>{{channelData.statistics.subscriberCount}}</p>
+            <p>{{ channelData.statistics.subscriberCount }}</p>
           </div>
         </div>
       </section>
     </main>
-    
-
   </div>
 </template>
 
 <script>
-import Loader from "@/components/loader.vue";
+import Loader from '@/components/loader.vue';
 
 export default {
-    components: { Loader},
+  components: { Loader },
 
   data() {
     return {
@@ -37,7 +45,7 @@ export default {
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
         part: 'snippet,contentDetails,statistics',
-        key: 'AIzaSyAoacmJKwfQNtZx6-TMjvpQ1_4HlDwkOFI',
+        key: 'AIzaSyC5JLw2HmcNvasFFr_GFyCpmQ3jQa9-rss',
         nextPageTokenSearch: '',
         maxResults: 25,
       },
@@ -45,7 +53,7 @@ export default {
     };
   },
   async mounted() {
-    this.loaderCompStatus = true
+    this.loaderCompStatus = true;
     const cahnnels = `${this.api.baseUrl}channels?part=${this.api.part}&key=${this.api.key}&id=${this.$route.params.id}`;
     const cahnnelsSections = `${this.api.baseUrl}channelSections?part=snippet,contentDetails&key=${this.api.key}&channelId=${this.$route.params.id}`;
     let res = await Promise.all([fetch(cahnnels), fetch(cahnnelsSections)]);
@@ -54,8 +62,8 @@ export default {
     );
     this.channelData = channelData.items[0];
     console.log(ownedChannels);
-    
-    this.loaderCompStatus = false
+
+    this.loaderCompStatus = false;
   },
 };
 </script>

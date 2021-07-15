@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="homePage">
     <!-- <Channel></Channel> -->
     <VideosList
       v-for="(video, index) in videosList"
@@ -24,32 +24,32 @@
 
 <script>
 // import Channel from '@/components/channel.vue';
-import VideosList from "@/components/videosList.vue";
-import LoadMore from "@/components/loadMore.vue";
-import Loader from "@/components/loader.vue";
-import Observer from "@/components/observer.vue";
+import VideosList from '@/components/videosList.vue';
+import LoadMore from '@/components/loadMore.vue';
+import Loader from '@/components/loader.vue';
+import Observer from '@/components/observer.vue';
 // import { EventBus } from "../eventBus";
 
 export default {
-  name: "Main",
+  name: 'Main',
   data() {
     return {
-      searchingParams: "",
+      searchingParams: '',
       observer: null,
       loaderStatus: false,
       loaderCompStatus: true,
       mobile: false,
       videosList: [],
       api: {
-        baseUrl: "https://www.googleapis.com/youtube/v3/videos?",
-        part: "snippet,contentDetails,statistics",
-        chart: "mostPopular",
-        order: "viewCount",
+        baseUrl: 'https://www.googleapis.com/youtube/v3/videos?',
+        part: 'snippet,contentDetails,statistics',
+        chart: 'mostPopular',
+        order: 'viewCount',
         maxResults: 20,
-        regionCode: "US",
-        key: "AIzaSyAoacmJKwfQNtZx6-TMjvpQ1_4HlDwkOFI",
-        prevPageToken: "",
-        nextPageToken: "",
+        regionCode: 'US',
+        key: 'AIzaSyC5JLw2HmcNvasFFr_GFyCpmQ3jQa9-rss',
+        prevPageToken: '',
+        nextPageToken: '',
       },
     };
   },
@@ -61,7 +61,7 @@ export default {
     Loader,
     Observer,
   },
-  
+
   async created() {
     console.log(this.$searchData, 'h');
     const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}`;
@@ -83,7 +83,7 @@ export default {
       console.log(err);
     }
   },
-  
+
   methods: {
     async intersected() {
       this.getMoreData();
@@ -93,20 +93,20 @@ export default {
       let a = duration.match(/\d+/g);
 
       if (
-        duration.indexOf("M") >= 0 &&
-        duration.indexOf("H") == -1 &&
-        duration.indexOf("S") == -1
+        duration.indexOf('M') >= 0 &&
+        duration.indexOf('H') == -1 &&
+        duration.indexOf('S') == -1
       ) {
         a = [0, a[0], 0];
       }
 
-      if (duration.indexOf("H") >= 0 && duration.indexOf("M") == -1) {
+      if (duration.indexOf('H') >= 0 && duration.indexOf('M') == -1) {
         a = [a[0], 0, a[1]];
       }
       if (
-        duration.indexOf("H") >= 0 &&
-        duration.indexOf("M") == -1 &&
-        duration.indexOf("S") == -1
+        duration.indexOf('H') >= 0 &&
+        duration.indexOf('M') == -1 &&
+        duration.indexOf('S') == -1
       ) {
         a = [a[0], 0, 0];
       }
@@ -133,9 +133,9 @@ export default {
       let m = Math.floor((duration % 3600) / 60);
       let s = Math.floor((duration % 3600) % 60);
 
-      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : "";
-      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : "";
-      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : "00";
+      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
+      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '';
+      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
       return hDisplay + mDisplay + sDisplay;
     },
     async getMoreData() {
@@ -166,4 +166,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="sass">
+$medium: 900px
+.homePage
+  @media (min-width: $medium)
+    padding: 0em 14em
+    padding-top: 8em
+</style>

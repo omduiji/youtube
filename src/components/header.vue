@@ -23,20 +23,20 @@
 </template>
 
 <script>
-import Youtube from "@/assets/logo.svg";
-import SearchIcon from "@/assets/search.svg";
+import Youtube from '@/assets/logo.svg';
+import SearchIcon from '@/assets/search.svg';
 // import Filters from "@/components/filters.vue";
 
 export default {
   components: { Youtube, SearchIcon },
   data() {
     return {
-      search: "",
+      search: '',
     };
   },
   methods: {
     getSearchQuery() {
-      this.$emit("getSearchParams", this.search);
+      this.$emit('getSearchParams', this.search);
     },
   },
 };
@@ -57,9 +57,10 @@ $medium: 900px;
     justify-content: space-between
     &__logo
       fill: white
-      width: clamp(1.8rem, 5rem, 6rem)
+      width: clamp(.5rem, 2rem, 2.5rem)
       @media (min-width: $medium)
         fill: red
+        width: clamp(1.8rem, 5rem, 6rem)
   &__form
     display: flex
     align-items: center
@@ -73,6 +74,10 @@ $medium: 900px;
       cursor: pointer
       &:disabled
         cursor: not-allowed
+      svg
+        width: 2em
+        transform: translateY(3px)
+        transition: all 150ms linear
       @media (min-width: $medium)
         background-color: rgb(248,248,248)
         border: 1px solid rgb(17,17,17)
@@ -93,8 +98,15 @@ $medium: 900px;
       background-color: $mainRed
       color: white
       font-size: clamp(1rem, 1.2rem, 3rem)
-      padding: .5em
       outline: none
+      margin: .25em
+      transition: all 150ms linear
+      padding: 0 .25em
+      margin: 0 1em
+      &:focus
+        border: 1px solid rgb(17,17,17)
+        background-color: white
+        color: rgb(17,17,17)
       &::placeholder
         color: white
         fontweight: 400
@@ -103,7 +115,9 @@ $medium: 900px;
         border: 1px solid rgb(17,17,17)
         color: rgb(17,17,17)
         padding: .35em
-        margin-left: 5em
+        margin: 0
+        margin-left: 3em
+
     &__icon
       width: clamp(1rem, 1.2rem, 3rem)
   @media (min-width: $medium)
@@ -114,4 +128,5 @@ $medium: 900px;
     box-shadow: 0px 0px 3px 0px rgb(17,17,17)
     width: 100vw
     opacity: .99
+    transition: all 150ms linear
 </style>

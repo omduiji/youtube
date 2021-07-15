@@ -23,3 +23,12 @@ export default {
   },
 };
 </script>
+<style lang="sass">
+$medium: 900px
+
+.observer
+  display: none
+  @media (min-width: $medium)
+    display: block
+    width: 0px
+</style>

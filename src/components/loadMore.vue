@@ -17,6 +17,7 @@ export default {
 </script>
 
 <style lang="sass">
+$medium: 900px
 .loadMore
   display: flex
   align-items: center
@@ -24,6 +25,8 @@ export default {
   flex-direction: column
   border-top: 1px solid #4c4c4c
   padding: .75em 0
+  @media (min-width: $medium)
+    display: none
   &__btn
     background-color: white
     border: none

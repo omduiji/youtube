@@ -20,7 +20,11 @@
       </div>
       <div class="videos__details">
         <p class="videos__details__name">{{ title }}</p>
+        <p class="videos__details__viewsDate">
+          {{ viewsCount | viewsFilter }} views.{{ publishDate | publishFilter }}
+        </p>
         <p class="videos__details__owner">{{ channelTitle }}</p>
+        <p class="videos__details__description">{{ videoDescription }}</p>
         <p class="videos__details__views">
           {{ viewsCount | viewsFilter }} views
         </p>
@@ -40,10 +44,38 @@ export default {
     'channelTitle',
     'viewsCount',
     'videoId',
+    'videoDescription',
+    'publishDate',
   ],
   filters: {
     viewsFilter: function (value) {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+    publishFilter: function (value) {
+      let d = new Date(value);
+      let currentYear = new Date().getFullYear();
+      let years = d.getFullYear();
+      let months = d.getMonth();
+      let hours = d.getHours();
+      let minutes = d.getMinutes();
+      if (years < currentYear && currentYear - years > 1)
+        return `${currentYear - years} years`;
+      if (years < currentYear) return `${currentYear - years} year`;
+      if (months === 1) {
+        return `${months} month`;
+      }
+      if (months > 1) {
+        return `${months} months`;
+      }
+      if (hours === 1) {
+        return `${hours} hour`;
+      }
+      if (hours > 1) {
+        return `${hours} hours`;
+      }
+      if (minutes > 0) {
+        return `${months} minutes`;
+      }
     },
   },
   methods: {
@@ -62,6 +94,8 @@ export default {
 </script>
 
 <style lang="sass">
+$medium: 900px
+
 .videos
   display: flex
   align-items: stretch
@@ -69,8 +103,6 @@ export default {
   margin-bottom: .5em
   cursor: pointer
   &__img
-
-    // border: 1px solid red
     position: relative
     &::after
       content: attr(data-duration)
@@ -86,20 +118,45 @@ export default {
   &__details
     font-size: 1rem
     margin-left: .75em
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    justify-content: stretch
     &__name
-      width: clamp(30vw, 50vw, 60vw)
+      width: 27ch
       color: #4c4c4c
-      font-size: 1.2em
+      font-size: .8em
       font-weight: 400
-      white-space: nowrap;
+      white-space: pre-wrap;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-bottom: .25em
+      @media (min-width: $medium)
+        font-size: 1.5em
+        width: clamp(30vw, 50vw, 60vw)
+    &__viewsDate
+      display: none
+      @media (min-width: $medium)
+        display: block
+        margin-bottom: 1.5em
     &__owner
       font-size: .75em
       font-weight: 300
       margin-bottom: .25em
+      @media (min-width: $medium)
+        margin-bottom: 1.5em
+        font-size: 1em
+    &__description
+      display: none
+      @media (min-width: $medium)
+        display: block
+        width: 55ch
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     &__views
       font-size: .75em
       font-weight: 300
+      @media (min-width: $medium)
+        display: none
 </style>
