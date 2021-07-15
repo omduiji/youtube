@@ -242,56 +242,56 @@ $medium: 900px
         width: 100%
         height: 500px
   &__details
+    display: flex
+    flex-direction: column
+    border-bottom: 1px solid #7C7C7C
+    padding: 1em
+    &__header
       display: flex
-      flex-direction: column
-      border-bottom: 1px solid #7C7C7C
-      padding: 1em
-      &__header
-          display: flex
-          align-items: center
-          justify-content: space-between
+      align-items: center
+      justify-content: space-between
+      margin-bottom: .5em
+      &__title
+          font-size: 1.2rem
+          color: #4c4c4c
+          font-weight: 500
           margin-bottom: .5em
-          &__title
-              font-size: 1.2rem
-              color: #4c4c4c
-              font-weight: 500
-              margin-bottom: .5em
-          &__owner
-              font-size: 1rem
-              color: #4c4c4c
-              font-weight: 300
-              width: 15ch
-              display: inline
-          &__views
-              font-size: .75rem
-              color: #4c4c4c
-              font-weight: 300
-          &__btn
-              color: #7C7C7C
-      &__footer
-          display: none
-          @media (min-width: $medium)
-            display: flex
-            align-items: center
-            justify-content: space-between
-            &__reactions
-                display: inline-flex
-                align-items: center
-                list-style-type: none
-                li
-                    display: flex
-                    align-items: center
-                    color:#7C7C7C
+      &__owner
+          font-size: 1rem
+          color: #4c4c4c
+          font-weight: 300
+          width: 15ch
+          display: inline
+      &__views
+          font-size: .75rem
+          color: #4c4c4c
+          font-weight: 300
+      &__btn
+          color: #7C7C7C
+    &__footer
+      display: flex
+      align-items: center
+      justify-content: space-between
+      @media (min-width: $medium)
+        display: none
+    &__reactions
+      display: inline-flex
+      align-items: center
+      list-style-type: none
+      li
+        display: flex
+        align-items: center
+        color:#7C7C7C
 
-                li + li
-                    margin-left: 1em
-            &__actions
-                display: inline-flex
-                align-items: center
-                list-style-type: none
-                li
-                    color: #7C7C7C
+      li + li
+          margin-left: 1em
+    &__actions
+      display: inline-flex
+      align-items: center
+      list-style-type: none
+      li
+          color: #7C7C7C
 
-                li + li
-                    margin-left: 1em
+      li + li
+          margin-left: 1em
 </style>
