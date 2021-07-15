@@ -4,7 +4,7 @@
     <main class="channelWrapper" v-else>
       <header class="channelWrapper__header">
         <img
-          :src="channelData.snippet.thumbnails.meduim.url"
+          :src="channelData.snippet.thumbnails.medium.url"
           alt=""
           loading="lazy"
           decoding="async"
@@ -13,7 +13,7 @@
       <section class="channelWrapper__body">
         <div class="channelWrapper__body__logo">
           <img
-            :src="channelData.snippet.thumbnails.defualt.url"
+            :src="channelData.snippet.thumbnails.default.url"
             alt=""
             loading="lazy"
             decoding="async"
@@ -45,7 +45,7 @@ export default {
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
         part: 'snippet,contentDetails,statistics',
-        key: 'AIzaSyC5JLw2HmcNvasFFr_GFyCpmQ3jQa9-rss',
+        key: 'AIzaSyD3o2HwgZ-RtrH3oj8igYAVB5NWpBvKyEg',
         nextPageTokenSearch: '',
         maxResults: 25,
       },
@@ -57,7 +57,7 @@ export default {
     const cahnnels = `${this.api.baseUrl}channels?part=${this.api.part}&key=${this.api.key}&id=${this.$route.params.id}`;
     const cahnnelsSections = `${this.api.baseUrl}channelSections?part=snippet,contentDetails&key=${this.api.key}&channelId=${this.$route.params.id}`;
     let res = await Promise.all([fetch(cahnnels), fetch(cahnnelsSections)]);
-    const [channelData, ownedChannels] = await Promise.all(
+    let [channelData, ownedChannels] = await Promise.all(
       res.map((r) => r.json())
     );
     this.channelData = channelData.items[0];

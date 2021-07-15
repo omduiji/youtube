@@ -12,6 +12,7 @@
       :channelTitle="video.channelTitle"
       :viewsCount="video.views"
       :videoId="video.id"
+      :type="video.type"
     ></VideosList>
     <LoadMore
       @getMoreData="getMoreData"
@@ -47,7 +48,7 @@ export default {
         order: 'viewCount',
         maxResults: 20,
         regionCode: 'US',
-        key: 'AIzaSyC5JLw2HmcNvasFFr_GFyCpmQ3jQa9-rss',
+        key: 'AIzaSyD3o2HwgZ-RtrH3oj8igYAVB5NWpBvKyEg',
         prevPageToken: '',
         nextPageToken: '',
       },
@@ -63,7 +64,6 @@ export default {
   },
 
   async created() {
-    console.log(this.$searchData, 'h');
     const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}`;
     try {
       let list = await fetch(apiUrl);
@@ -76,6 +76,7 @@ export default {
           videoTitle: item.snippet.title,
           thumpnails: item.snippet.thumbnails,
           views: item.statistics.viewCount,
+          type: 'video'
         };
       });
       this.api.nextPageToken = response.nextPageToken;
