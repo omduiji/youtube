@@ -269,27 +269,29 @@ $medium: 900px
           &__btn
               color: #7C7C7C
       &__footer
-          display: flex
-          align-items: center
-          justify-content: space-between
-          &__reactions
-              display: inline-flex
-              align-items: center
-              list-style-type: none
-              li
-                  display: flex
-                  align-items: center
-                  color:#7C7C7C
+          display: none
+          @media (min-width: $medium)
+            display: flex
+            align-items: center
+            justify-content: space-between
+            &__reactions
+                display: inline-flex
+                align-items: center
+                list-style-type: none
+                li
+                    display: flex
+                    align-items: center
+                    color:#7C7C7C
 
-              li + li
-                  margin-left: 1em
-          &__actions
-              display: inline-flex
-              align-items: center
-              list-style-type: none
-              li
-                  color: #7C7C7C
+                li + li
+                    margin-left: 1em
+            &__actions
+                display: inline-flex
+                align-items: center
+                list-style-type: none
+                li
+                    color: #7C7C7C
 
-              li + li
-                  margin-left: 1em
+                li + li
+                    margin-left: 1em
 </style>
