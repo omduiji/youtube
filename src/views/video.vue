@@ -87,7 +87,7 @@ export default {
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
         part: 'snippet,contentDetails,statistics,player',
-        key: 'AIzaSyD3o2HwgZ-RtrH3oj8igYAVB5NWpBvKyEg',
+        key: 'AIzaSyBZbmbE5IBh--vtmyyVJYHYQsZZO4e_nf4',
         nextPageTokenSearch: '',
         maxResults: 25,
       },

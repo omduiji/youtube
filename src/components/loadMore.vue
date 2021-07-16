@@ -33,4 +33,6 @@ $medium: 900px
     color: #4c4c4c
     font-size: 1rem
     font-weight: 300
+  @media (min-width: $medium)
+    display: none
 </style>
