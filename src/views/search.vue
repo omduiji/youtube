@@ -69,7 +69,7 @@ export default {
   },
 
   async created() {
-    console.log(this.$route.params.searchObject, 'apaarasm');
+    // console.log(this.$route.params.searchObject, 'apaarasm');
     await this.searching();
   },
 
@@ -83,9 +83,7 @@ export default {
       let types = this.$route.params.searchObject.type
         ? this.$route.params.searchObject.type.split(',')
         : ['channel', 'video', 'playlist'];
-      // let time = this.$route.params.searchObject.time
-      //   ? this.$route.params.searchObject.time
-      //   : { start: '', end: '' };
+
       let dynamicTokens = {
         channel: this.api.channelToken,
         video: this.api.videoToken,
@@ -95,9 +93,6 @@ export default {
       let urls = [];
       let urlParams = new URLSearchParams();
 
-      // let url = new URL(`${this.api.baseUrl}search`);
-      // urlParams.append('type', this.$route.params.searchObject.query)
-      // urlParams.append('pageToken', this.$route.params.searchObject.query)
       urlParams.append('q', this.$route.params.searchObject.query);
       urlParams.append('regionCode', this.api.regionCode);
       urlParams.append('maxResults', this.api.maxResults);
@@ -117,23 +112,12 @@ export default {
           this.$route.params.searchObject.time.start
         );
       }
-      // console.log(urlParams.values(), 'sasdasdqw');
       types.forEach((type) => {
         urls.push(
           `${this.api.baseUrl}search?&type=${type}&pageToken=&${dynamicTokens[type]}${urlParams}`
         );
       });
-      // urls.forEach((url) => {
-      //   new URL(url).search = urlParams;
-      // });
-      // types.forEach((type) => {
-      //   urlParams.append('type', type);
-      //   urlParams.append(
-      //     'pageToken',
-      //     this.api.searchToken || dynamicTokens[type]
-      //   );
-      // });
-      console.log(this.$route.params.searchObject.order);
+
       try {
         let result = await Promise.all(urls.map((item) => fetch(item)));
         let resultArr = await Promise.all(result.map((item) => item.json()));
@@ -143,9 +127,8 @@ export default {
           this.api.videoToken = resultArr[2].nextPageToken;
         }
         this.api.searchToken = resultArr[0].nextPageToken;
-        // console.log(this.api.searchToken, resultArr, 'pppp');
         let arr = await this.getSearchResults(resultArr, types);
-        console.log(arr);
+        // console.log(arr);
 
         for (let i = arr.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -226,6 +209,7 @@ export default {
           }, []);
         })
         .flat();
+
       let finaSearchArray = finalMap.map((item) => {
         return {
           videoDuration:
@@ -242,6 +226,9 @@ export default {
     },
 
     convertTime(duration) {
+      if (duration === undefined) {
+        return '';
+      }
       let a = duration.match(/\d+/g);
 
       if (
