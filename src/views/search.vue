@@ -24,6 +24,7 @@
     <LoadMore @getMoreData="getMoreData" v-show="loaderCompStatus"></LoadMore>
     <Loader v-show="!loaderCompStatus"></Loader>
     <Observer @intersect="intersected" />
+    <Filters v-if="notAvailabale" :searchResultsCount="resultsCount"></Filters>
   </div>
 </template>
 
@@ -33,15 +34,19 @@ import VideosList from '@/components/videosList.vue';
 import LoadMore from '@/components/loadMore.vue';
 import Loader from '@/components/loader.vue';
 import Observer from '@/components/observer.vue';
+import Filters from '@/components/filters.vue';
+
 // import { EventBus } from "../eventBus";
 
 export default {
   name: 'Main',
   data() {
     return {
+      resultsCount: '',
       searchingParams: '',
       observer: null,
       loaderCompStatus: true,
+      notAvailabale: false,
       searchResults: [],
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
@@ -66,6 +71,7 @@ export default {
     LoadMore,
     Loader,
     Observer,
+    Filters,
   },
 
   async created() {
@@ -127,6 +133,12 @@ export default {
           this.api.videoToken = resultArr[2].nextPageToken;
         }
         this.api.searchToken = resultArr[0].nextPageToken;
+        this.resultsCount = resultArr.reduce(
+          (acc, i) => acc + i.pageInfo.totalResults,
+          0
+        );
+        // console.log(this.resultsCount);
+        window.localStorage.setItem('count', this.resultsCount);
         let arr = await this.getSearchResults(resultArr, types);
         // console.log(arr);
 

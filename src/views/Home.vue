@@ -13,6 +13,7 @@
       :viewsCount="video.views"
       :videoId="video.id"
       :type="video.type"
+      :videoDescription="video.description"
     ></VideosList>
     <LoadMore
       @getMoreData="getMoreData"
@@ -29,6 +30,7 @@ import VideosList from '@/components/videosList.vue';
 import LoadMore from '@/components/loadMore.vue';
 import Loader from '@/components/loader.vue';
 import Observer from '@/components/observer.vue';
+
 // import { EventBus } from "../eventBus";
 
 export default {
@@ -78,6 +80,7 @@ export default {
           thumpnails: item.snippet.thumbnails,
           views: item.statistics.viewCount,
           type: 'video',
+          description: item.snippet.description,
         };
       });
       this.api.nextPageToken = response.nextPageToken;

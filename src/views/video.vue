@@ -230,6 +230,8 @@ export default {
 $medium: 900px
 .videoContainer
   padding: 0 2em
+  margin-top: 2em
+  padding: 0
   &__listVideos
     @media (min-width: $medium)
       padding: 1em 14em
@@ -274,24 +276,24 @@ $medium: 900px
       justify-content: space-between
       @media (min-width: $medium)
         display: none
-    &__reactions
-      display: inline-flex
-      align-items: center
-      list-style-type: none
-      li
-        display: flex
+      &__reactions
+        display: inline-flex
         align-items: center
-        color:#7C7C7C
+        list-style-type: none
+        li
+          display: flex
+          align-items: center
+          color:#7C7C7C
 
-      li + li
-          margin-left: 1em
-    &__actions
-      display: inline-flex
-      align-items: center
-      list-style-type: none
-      li
-          color: #7C7C7C
+        li + li
+            margin-left: 1em
+      &__actions
+        display: inline-flex
+        align-items: center
+        list-style-type: none
+        li
+            color: #7C7C7C
 
-      li + li
-          margin-left: 1em
+        li + li
+            margin-left: 1em
 </style>

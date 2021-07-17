@@ -1,19 +1,24 @@
 <template>
-  <div>
+  <div v-if="this.$route.name === 'Search' || 'Home'">
     <div class="filters">
       <div class="filters__wrapper">
         <header class="filters__wrapper__header">
-          <p>About 12,00000000 results</p>
-          <button><FilterIcon></FilterIcon>Filter</button>
+          <p v-if="results && !hideWrapper">
+            About {{ results | viewsFilter }} results
+          </p>
+          <p v-else></p>
+          <button @click="hideWrapper = !hideWrapper">
+            <FilterIcon></FilterIcon>Filter
+          </button>
         </header>
-        <main class="filters__wrapper__container">
+        <main class="filters__wrapper__container" v-if="!hideWrapper">
           <div class="filters__wrapper__container__item">
             <p>Upload Date</p>
             <ul class="filters__wrapper__container__item__list">
               <li
-                v-for="time in times"
+                v-for="(time, index) in times"
                 :key="time.name"
-                @click="sendDate(time)"
+                @click="sendDate(index)"
               >
                 {{ time.name }}
                 <Close
@@ -27,9 +32,9 @@
             <p>Type</p>
             <ul class="filters__wrapper__container__item__list">
               <li
-                v-for="type in types"
+                v-for="(type, index) in types"
                 :key="type.name"
-                @click="sendType(type)"
+                @click="sendType(index)"
               >
                 {{ type.name }}
                 <Close
@@ -43,15 +48,15 @@
             <p>Sort By</p>
             <ul class="filters__wrapper__container__item__list">
               <li
-                v-for="order in orders"
+                v-for="(order, index) in orders"
                 :key="order.name"
-                @click="sendOrder(order)"
+                @click="sendOrder(index)"
               >
                 {{ order.name }}
-                <Close
-                  v-show="order.iconStatus"
-                  @click="removeOrder(order)"
-                ></Close>
+                <span v-if="order.iconStatus" @click="removeOrder(index)"
+                  ><Close></Close
+                ></span>
+                <span v-else></span>
               </li>
             </ul>
           </div>
@@ -101,8 +106,23 @@
 import Close from '@/assets/close.svg';
 import FilterIcon from '@/assets/filter.svg';
 export default {
+  created() {
+    // console.log(this.$route);
+    this.results = window.localStorage.getItem('count');
+    // if (this.$route.name == 'Video') window.localStorage.clear();
+    // if (this.$route.name == 'Home') window.localStorage.getItem('count');
+  },
+  filters: {
+    viewsFilter: function (value) {
+      return typeof value !== String
+        ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : '';
+    },
+  },
   data() {
     return {
+      results: '',
+      hideWrapper: true,
       searchByType: '',
       searchByPeriod: 'all',
       searchByOrder: 'relevance',
@@ -185,19 +205,33 @@ export default {
     Close,
     FilterIcon,
   },
+  props: {
+    searchResultsCount: null,
+  },
   methods: {
     removeOrder(order) {
-      order.iconStatus = false;
-      console.log(order, 'ooo');
+      this.orders[order].iconStatus = false;
+      // let temp = this.orders[order];
+      // let tempIndex = order;
+      // this.orders.splice(order, 1);
+      // this.orders.push(temp);
+      // this.orders[tempIndex] = temp;
+      console.log(this.orders[order].iconStatus, 'ooo');
     },
     sendDate(element) {
-      element.iconStatus = true;
+      this.times[element].iconStatus = true;
+      this.searchByPeriod = this.times[element].value;
+      this.searchingByTime();
     },
     sendType(element) {
-      element.iconStatus = true;
+      this.types[element].iconStatus = true;
+      this.searchByType = this.types[element].value;
+      this.searchingByType();
     },
     sendOrder(element) {
-      element.iconStatus = true;
+      this.orders[element].iconStatus = true;
+      this.searchByOrder = this.orders[element].value;
+      this.searchingByOrder();
     },
     searchingByType() {
       this.$emit('typeSearch', this.searchByType);
@@ -254,9 +288,10 @@ $medium: 900px;
   flex-basis: 33%
   border-bottom: 1px solid #ACACAC
   @media (min-width: $medium)
-    padding: 8em  0 9em
-    padding-bottom: 6em
+    padding-top: 8em
+    padding-bottom: 0em
     margin: 0 14em
+    border: none
   &__wrapper
     display: none
     @media (min-width: $medium)
@@ -264,6 +299,7 @@ $medium: 900px;
       flex-direction: column
       justify-content: space-between
       flex-grow: 1
+      border-bottom: 1px solid #ACACAC
       &__header
         display: flex
         align-items: center
