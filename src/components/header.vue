@@ -18,7 +18,11 @@
         </form>
       </header>
     </nav>
-    <Filters @typeSearch="searchedByType" @timeSearch="searchByTime"></Filters>
+    <Filters
+      @typeSearch="searchedByType"
+      @timeSearch="searchByTime"
+      @orderSearch="searchByOrder"
+    ></Filters>
   </div>
 </template>
 
@@ -43,6 +47,9 @@ export default {
     },
     searchByTime(value) {
       this.$emit('getSearchParamsFilteredByTime', value);
+    },
+    searchByOrder(value) {
+      this.$emit('getSearchParamsFilteredByOrder', value);
     },
   },
 };

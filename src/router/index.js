@@ -24,7 +24,7 @@ const routes = [
     component: Channel,
   },
   {
-    path: '/search/:query/:type/:time',
+    path: '/search/:query/:type/:time/:order',
     name: 'Search',
     component: Search,
   },

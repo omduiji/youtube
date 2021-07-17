@@ -55,6 +55,7 @@ export default {
         q: '',
         searchPageToken: '',
         listResultsToken: '',
+        order: '',
       },
     };
   },
@@ -68,7 +69,7 @@ export default {
   },
 
   async created() {
-    console.log(this.$route.params, 'ppppppp');
+    console.log(this.$route.params.searchObject, 'apaarasm');
     await this.searching();
   },
 
@@ -83,62 +84,74 @@ export default {
         ? this.$route.params.searchObject.type.split(',')
         : ['channel', 'video', 'playlist'];
       // let time = this.$route.params.searchObject.time
-      //   ? this.$route.params.searchObject.time.split(',')
+      //   ? this.$route.params.searchObject.time
       //   : { start: '', end: '' };
-      console.log(types);
-      // let dynamicParams = [
-      //   { type: 'channel', token: this.api.channelToken },
-      //   { type: 'playlist', token: this.api.playlistToken },
-      //   { type: 'video', token: this.api.videoToken },
-      // ];
+      let dynamicTokens = {
+        channel: this.api.channelToken,
+        video: this.api.videoToken,
+        playlist: this.api.playlistToken,
+      };
+
       let urls = [];
-      // let url = `${this.api.baseUrl}search?part=${this.api.part}&q=${
-      //   this.$route.params.searchObject.query
-      // }&type=${
-      //   this.$route.params.searchObject.type || 'channel,video,playlist'
-      // }&regionCode=${this.api.regionCode}&maxResults=${
-      //   this.api.maxResults
-      // }&key=${this.api.key}&pageToken=${
-      //   this.api.searchPageToken
-      // }&publishedAfter=${
-      //   this.$route.params.searchObject.time.start || ''
-      // }&publishedBefore=${this.$route.params.searchObject.time.end || ''}`;
-      types.forEach((item) => {
+      let urlParams = new URLSearchParams();
+
+      // let url = new URL(`${this.api.baseUrl}search`);
+      // urlParams.append('type', this.$route.params.searchObject.query)
+      // urlParams.append('pageToken', this.$route.params.searchObject.query)
+      urlParams.append('q', this.$route.params.searchObject.query);
+      urlParams.append('regionCode', this.api.regionCode);
+      urlParams.append('maxResults', this.api.maxResults);
+      urlParams.append('part', this.api.part);
+      urlParams.append('key', this.api.key);
+
+      if (this.$route.params.searchObject.order)
+        urlParams.append('order', this.$route.params.searchObject.order);
+
+      if (this.$route.params.searchObject.time) {
+        urlParams.append(
+          'publishedBefore',
+          this.$route.params.searchObject.time.end
+        );
+        urlParams.append(
+          'publishedAfter',
+          this.$route.params.searchObject.time.start
+        );
+      }
+      // console.log(urlParams.values(), 'sasdasdqw');
+      types.forEach((type) => {
         urls.push(
-          `${this.api.baseUrl}search?part=${this.api.part}&q=${this.$route.params.searchObject.query}&type=${item}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.searchPageToken}`
+          `${this.api.baseUrl}search?&type=${type}&pageToken=&${dynamicTokens[type]}${urlParams}`
         );
       });
-
+      // urls.forEach((url) => {
+      //   new URL(url).search = urlParams;
+      // });
+      // types.forEach((type) => {
+      //   urlParams.append('type', type);
+      //   urlParams.append(
+      //     'pageToken',
+      //     this.api.searchToken || dynamicTokens[type]
+      //   );
+      // });
+      console.log(this.$route.params.searchObject.order);
       try {
-        // let searchQuery = await fetch(url);
-        // let searchQueryRes = await searchQuery.json();
-        // this.api.searchPageToken = searchQueryRes.nextPageToken;
-        // let res = await this.getSearchResults(searchQueryRes.items);
-        // console.log(res);
         let result = await Promise.all(urls.map((item) => fetch(item)));
         let resultArr = await Promise.all(result.map((item) => item.json()));
-        // console.log(...resultArr, 'ressss');
         if (resultArr.length > 1) {
           this.api.channelToken = resultArr[0].nextPageToken;
           this.api.playlistToken = resultArr[1].nextPageToken;
           this.api.videoToken = resultArr[2].nextPageToken;
         }
-        this.api.searchToken = resultArr.nextPageToken;
-        // let arr = resultArr.forEach((item) => {
-        //   this.getSearchResults(item.items, types);
-        // });
+        this.api.searchToken = resultArr[0].nextPageToken;
+        // console.log(this.api.searchToken, resultArr, 'pppp');
         let arr = await this.getSearchResults(resultArr, types);
         console.log(arr);
-        // let res = [
-        //   ...(await this.getVideos(videosDetails)),
-        //   ...(await this.getChannels(channelsDetails)),
-        //   ...(await this.getPlaylists(playlistsDetails)),
-        // ];
+
         for (let i = arr.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [arr[i], arr[j]] = [arr[j], arr[i]];
         }
-        // this.loaderCompStatus = false;
+        this.loaderCompStatus = false;
         this.searchResults = [...this.searchResults, ...arr];
       } catch (err) {
         console.log(err);
@@ -146,38 +159,13 @@ export default {
       this.loaderCompStatus = true;
     },
     async getSearchResults(list, types) {
-      console.log(list, 'lisssss');
-      console.log(types, 'ss');
       const { baseUrl, key } = this.api;
       const parts = {
         channel: 'snippet,contentDetails,statistics',
         playlist: 'snippet,contentDetails',
         video: 'snippet,contentDetails,statistics',
       };
-      // let listIds = list
-      //   .map((list) => list.id[`${this.$route.params.searchObject.type}Id`])
-      //   .join(',');
-      // let urlLists = list.map((item) => {
-      //   types.map((element) => {
-      //     return {
-      //       url: `${baseUrl}${element}s?part=${
-      //         parts[`${element}`]
-      //       }&key=${key}&id=${item.id[`${element}Id`]}`,
-      //     };
-      //   });
-      // });
 
-      // let urlLists = list.map((listItem) =>
-      //   listItem.items.map((item) => {
-      //     types.map((element) => {
-      //       return {
-      //         url: `${baseUrl}${element}s?part=${
-      //           parts[`${element}`]
-      //         }&key=${key}&id=${item.id[`${element}Id`]}`,
-      //       };
-      //     });
-      //   })
-      // );
       let channelIds = [];
       let playlistIds = [];
       let videoIds = [];
@@ -189,7 +177,6 @@ export default {
           if (item.id.videoId) videoIds.push(item.id.videoId);
         })
       );
-      // console.log(channelIds, playlistIds, videoIds, 'ooooooooooo');
       types.forEach((type) => {
         if (type === 'channel') {
           urls.push(
@@ -248,9 +235,6 @@ export default {
       });
 
       return finaSearchArray;
-      // const apiUrl = `${baseUrl}${this.$route.params.searchObject.type}s?part=${parts.this.$route.params.searchObject.type}&key=${key}&id=${listIds}`;
-      // let listQuery = await fetch(apiUrl);
-      // // let listQueryResult = await listQuery.json();
     },
 
     async intersected() {
@@ -300,7 +284,6 @@ export default {
       let h = Math.floor(duration / 3600);
       let m = Math.floor((duration % 3600) / 60);
       let s = Math.floor((duration % 3600) % 60);
-      console.log(h, m, s, 'wwww');
       let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
       let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '';
       let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';

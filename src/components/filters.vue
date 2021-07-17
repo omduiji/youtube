@@ -24,6 +24,18 @@
       <option value="weekAgo">This Week</option>
       <option value="monthAgo">This Month</option>
     </select>
+    <select
+      name=""
+      id=""
+      class="filters__select"
+      v-model="searchByOrder"
+      @change="searchingByOrder"
+    >
+      <option value="relevance">Relevence</option>
+      <option value="date">Upload date</option>
+      <option value="viewCount">View count</option>
+      <option value="rating">Rating</option>
+    </select>
   </div>
 </template>
 
@@ -33,6 +45,7 @@ export default {
     return {
       searchByType: '',
       searchByPeriod: 'all',
+      searchByOrder: 'relevance',
     };
   },
   methods: {
@@ -41,6 +54,9 @@ export default {
     },
     searchingByTime() {
       this.$emit('timeSearch', this.getTimeFormat(this.searchByPeriod));
+    },
+    searchingByOrder() {
+      this.$emit('orderSearch', this.searchByOrder);
     },
     getTimeFormat(value) {
       let publishingObject = {

@@ -5,6 +5,7 @@
       @getSearchParams="getParams"
       @getSearchParamsFilteredByType="getTypeFilters"
       @getSearchParamsFilteredByTime="getTimeFilters"
+      @getSearchParamsFilteredByOrder="getOrderFilters"
     ></Header>
     <router-view />
   </div>
@@ -20,6 +21,7 @@ export default {
     return {
       typeFilter: '',
       timeFilter: '',
+      orderFilter: '',
     };
   },
   name: 'Home',
@@ -34,6 +36,7 @@ export default {
       };
       if (this.typeFilter) searchObject.type = this.typeFilter;
       if (this.timeFilter) searchObject.time = this.timeFilter;
+      if (this.orderFilter) searchObject.order = this.orderFilter;
       this.$router.push({ name: 'Search', params: { searchObject } });
     },
     getTypeFilters(value) {
@@ -41,6 +44,9 @@ export default {
     },
     getTimeFilters(value) {
       this.timeFilter = value;
+    },
+    getOrderFilters(value) {
+      this.orderFilter = value;
     },
   },
 };
