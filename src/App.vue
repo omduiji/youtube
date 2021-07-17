@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <!-- <MainPage></MainPage> -->
-    <Header @getSearchParams="getParams"></Header>
+    <Header
+      @getSearchParams="getParams"
+      @getSearchParamsFilteredByType="getTypeFilters"
+      @getSearchParamsFilteredByTime="getTimeFilters"
+    ></Header>
     <router-view />
   </div>
 </template>
@@ -13,7 +17,10 @@ import Header from './components/header.vue';
 
 export default {
   data() {
-    return {};
+    return {
+      typeFilter: '',
+      timeFilter: '',
+    };
   },
   name: 'Home',
   components: {
@@ -22,7 +29,18 @@ export default {
   },
   methods: {
     getParams(params) {
-      this.$router.push({ name: 'Search', params: { query: params } });
+      let searchObject = {
+        query: params,
+      };
+      if (this.typeFilter) searchObject.type = this.typeFilter;
+      if (this.timeFilter) searchObject.time = this.timeFilter;
+      this.$router.push({ name: 'Search', params: { searchObject } });
+    },
+    getTypeFilters(value) {
+      this.typeFilter = value;
+    },
+    getTimeFilters(value) {
+      this.timeFilter = value;
     },
   },
 };

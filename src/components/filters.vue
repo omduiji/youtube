@@ -1,20 +1,81 @@
 <template>
   <div class="filters">
-    <select name="" id="" class="filters__select">
+    <select
+      name=""
+      id=""
+      class="filters__select"
+      v-model="searchByType"
+      @change="searchingByType"
+    >
       <option value="">All</option>
-      <option value="">All</option>
-      <option value="">All</option>
+      <option value="channel">Channel</option>
+      <option value="video">Video</option>
+      <option value="playlist">Playlist</option>
     </select>
-    <select name="" id="" class="filters__select">
-      <option value="">Any Time</option>
-      <option value="">Any Time</option>
-      <option value="">Any Time</option>
+    <select
+      name=""
+      id=""
+      class="filters__select"
+      v-model="searchByPeriod"
+      @change="searchingByTime"
+    >
+      <option value="all">All</option>
+      <option value="today">Today</option>
+      <option value="weekAgo">This Week</option>
+      <option value="monthAgo">This Month</option>
     </select>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      searchByType: '',
+      searchByPeriod: 'all',
+    };
+  },
+  methods: {
+    searchingByType() {
+      this.$emit('typeSearch', this.searchByType);
+    },
+    searchingByTime() {
+      this.$emit('timeSearch', this.getTimeFormat(this.searchByPeriod));
+    },
+    getTimeFormat(value) {
+      let publishingObject = {
+        start: '',
+        end: '',
+      };
+      let today = new Date();
+      if (value === 'today') {
+        publishingObject.start = today.toISOString();
+        publishingObject.end = today.toISOString();
+      }
+      if (value === 'weekAgo') {
+        publishingObject.end = today.toISOString();
+        publishingObject.start = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate() - 7
+        ).toISOString();
+      }
+      if (value === 'monthAgo') {
+        publishingObject.end = new Date(
+          today.getFullYear(),
+          today.getMonth() + 1,
+          0
+        ).toISOString();
+        publishingObject.start = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          1
+        ).toISOString();
+      }
+      return publishingObject;
+    },
+  },
+};
 </script>
 
 <style lang="sass">

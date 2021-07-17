@@ -48,9 +48,10 @@ export default {
         order: 'viewCount',
         maxResults: 20,
         regionCode: 'US',
-        key: 'AIzaSyBZbmbE5IBh--vtmyyVJYHYQsZZO4e_nf4',
+        key: 'AIzaSyDoGaVf9MN-JswI8VvddPMMlHsIt3TfEdI',
         prevPageToken: '',
         nextPageToken: '',
+        videoEmbeddable: 'true',
       },
     };
   },
@@ -64,7 +65,7 @@ export default {
   },
 
   async created() {
-    const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}`;
+    const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}&videoEmbeddable=${this.api.videoEmbeddable}`;
     try {
       let list = await fetch(apiUrl);
       let response = await list.json();
