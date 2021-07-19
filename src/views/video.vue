@@ -35,11 +35,11 @@
           <ul class="videoContainer__details__footer__reactions">
             <li>
               <ThumpsUpIcon></ThumpsUpIcon
-              >{{ videoDetails.statistics.likeCount }}
+              >{{ videoDetails.statistics.likeCount | likesFilter }}
             </li>
             <li>
               <ThumpsDownIcon></ThumpsDownIcon
-              >{{ videoDetails.statistics.dislikeCount }}
+              >{{ videoDetails.statistics.dislikeCount | likesFilter }}
             </li>
           </ul>
           <ul class="videoContainer__details__footer__actions">
@@ -48,7 +48,45 @@
             <li><FlagIcon></FlagIcon></li>
           </ul>
         </footer>
+        <footer class="videoContainer__details__footerDesktop">
+          <p class="videoContainer__details__footerDesktop__views">
+            {{ videoDetails.statistics.viewCount | viewsFilter }} views .
+            {{ videoDetails.snippet.publishedAt | publishFilter }} ago
+          </p>
+          <ul class="videoContainer__details__footerDesktop__actions">
+            <li>
+              <ThumpsUpIcon></ThumpsUpIcon
+              >{{ videoDetails.statistics.likeCount | likesFilter }}
+            </li>
+            <li>
+              <ThumpsDownIcon></ThumpsDownIcon
+              >{{ videoDetails.statistics.dislikeCount | likesFilter }}
+            </li>
+            <li><ShareIcon></ShareIcon> Share</li>
+            <li><Playlist></Playlist></li>
+            <li><More></More></li>
+          </ul>
+        </footer>
       </main>
+      <div class="videoContainer__channel">
+        <p class="videoContainer__channel__title" @click="routeToChannel">
+          {{ videoDetails.snippet.channelTitle }}
+        </p>
+        <p class="videoContainer__channel__desc" v-if="videoShortDescription">
+          {{ videoDescription }} ...
+        </p>
+        <p class="videoContainer__channel__desc" v-else>
+          {{ videoDetails.snippet.description }}
+        </p>
+        <button @click="videoShortDescription = !videoShortDescription">
+          Show {{ videoShortDescription ? 'More' : 'Less' }}
+        </button>
+        <ul>
+          <li v-for="tag in videoDetails.snippet.tags" :key="tag">
+            #{{ tag }}
+          </li>
+        </ul>
+      </div>
     </article>
     <div class="videoContainer__listVideos">
       <VideosList
@@ -62,6 +100,7 @@
         :channelTitle="video.channelTitle"
         :viewsCount="video.views"
         :videoId="video.id"
+        :videoDescription="video.videoDescription"
       ></VideosList>
     </div>
     <Observer @intersect="intersected" />
@@ -73,9 +112,11 @@ import VideosList from '@/components/videosList.vue';
 import FlagIcon from '@/assets/flag.svg';
 import PlusIcon from '@/assets/plus.svg';
 import ShareIcon from '@/assets/share.svg';
+import Playlist from '@/assets/playlist.svg';
 import ThumpsUpIcon from '@/assets/thumps-up.svg';
 import ThumpsDownIcon from '@/assets/thumps-down.svg';
 import Arrow from '@/assets/arrow-down.svg';
+import More from '@/assets/more.svg';
 import Observer from '@/components/observer.vue';
 
 export default {
@@ -84,6 +125,8 @@ export default {
       relatedVideos: [],
       videoDetails: {},
       showFooter: false,
+      videoDescription: '',
+      videoShortDescription: true,
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
         part: 'snippet,contentDetails,statistics,player',
@@ -99,6 +142,10 @@ export default {
       let list = await fetch(apiUrl);
       let response = await list.json();
       this.videoDetails = response.items[0];
+      this.videoDescription = response.items[0].snippet.description.substring(
+        0,
+        250
+      );
     } catch (err) {
       console.log(err);
     }
@@ -151,6 +198,7 @@ export default {
             videoTitle: item.snippet.title,
             thumpnails: item.snippet.thumbnails,
             views: item.statistics.viewCount,
+            videoDescription: item.snippet.description,
           };
         });
       } catch (err) {
@@ -217,10 +265,49 @@ export default {
     ThumpsDownIcon,
     Arrow,
     Observer,
+    Playlist,
+    More,
   },
   filters: {
     viewsFilter: function (value) {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+    likesFilter: function (value) {
+      if (Math.abs(value) > 999)
+        return Math.sign(value) * (Math.abs(value) / 1000).toFixed(1) + 'k';
+      if (Math.abs(value) > 999999)
+        return Math.sign(value) * (Math.abs(value) / 1000000).toFixed(1) + 'M';
+      if (Math.abs(value) > 999999999)
+        return (
+          Math.sign(value) * (Math.abs(value) / 1000000000).toFixed(1) + 'B'
+        );
+      return Math.sign(value) * Math.abs(value);
+    },
+    publishFilter: function (value) {
+      let d = new Date(value);
+      let currentYear = new Date().getFullYear();
+      let years = d.getFullYear();
+      let months = d.getMonth();
+      let hours = d.getHours();
+      let minutes = d.getMinutes();
+      if (years < currentYear && currentYear - years > 1)
+        return `${currentYear - years} years`;
+      if (years < currentYear) return `${currentYear - years} year`;
+      if (months === 1) {
+        return `${months} month`;
+      }
+      if (months > 1) {
+        return `${months} months`;
+      }
+      if (hours === 1) {
+        return `${hours} hour`;
+      }
+      if (hours > 1) {
+        return `${hours} hours`;
+      }
+      if (minutes > 0) {
+        return `${months} minutes`;
+      }
     },
   },
 };
@@ -237,7 +324,7 @@ $medium: 900px
       padding: 1em 14em
   @media (min-width: $medium)
     padding: 0 15em
-    padding-top: 9em
+    padding-top: 2em
   &__video
       width: 100%
       iframe
@@ -264,12 +351,16 @@ $medium: 900px
           font-weight: 300
           width: 15ch
           display: inline
+          @media (min-width: $medium)
+            display: none
       &__views
           font-size: .75rem
           color: #4c4c4c
           font-weight: 300
       &__btn
           color: #7C7C7C
+          @media (min-width: $medium)
+            display: none
     &__footer
       display: flex
       align-items: center
@@ -284,6 +375,8 @@ $medium: 900px
           display: flex
           align-items: center
           color:#7C7C7C
+          svg
+            margin-right: .25em
 
         li + li
             margin-left: 1em
@@ -296,4 +389,59 @@ $medium: 900px
 
         li + li
             margin-left: 1em
+    &__footerDesktop
+      display: none
+      @media (min-width: $medium)
+        display: flex
+        align-items: center
+        justify-content: space-between
+        ul
+          display: inline-flex
+          align-items: center
+          list-style-type: none
+          li
+            display: flex
+            align-items: center
+            color:#7C7C7C
+            svg
+              margin-right: .25em
+
+          li + li
+              margin-left: 1em
+  &__channel
+    display: flex
+    flex-direction: column
+    padding: 2em 0
+    border-bottom: 1px solid #7C7C7C
+    &__title
+      cursor: pointer
+      font-size: 1.5rem
+      &:hover
+        color: blue
+    &__desc
+      line-height: 1.7
+      margin-bottom: .75em
+    button
+      background-color: transparent
+      padding: .25em
+      font-size: 1rem
+      border: none
+      outline: none
+      cursor: pointer
+      align-self: flex-start
+      transition: all 100ms linear
+      margin-bottom: .75em
+      &:hover
+        color: blue
+    ul
+      display: flex
+      flex-wrap: wrap
+      align-items: center
+      list-style: none
+      li
+        padding: .25em
+        color: blue
+        cursor: pointer
+        &:hover
+          color: red
 </style>

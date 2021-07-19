@@ -15,10 +15,7 @@
       :type="video.type"
       :videoDescription="video.description"
     ></VideosList>
-    <LoadMore
-      @getMoreData="getMoreData"
-      v-show="loaderCompStatus && mobile"
-    ></LoadMore>
+    <LoadMore @getMoreData="getMoreData" v-show="loaderCompStatus"></LoadMore>
     <Loader v-show="!loaderCompStatus"></Loader>
     <Observer @intersect="intersected" />
   </div>
