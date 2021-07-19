@@ -24,7 +24,14 @@
           </h1>
           <div class="channelWrapper__body__details__subscripeBtn">
             <button>SUBSCRIBE</button>
-            <!-- <p>{{ channelData.statistics.subscriberCount | viewsFilter }}</p> -->
+            <p>
+              {{ channelData.statistics.subscriberCount | viewsFilter }}
+              <span>{{
+                channelData.statistics.subscriberCount > 1
+                  ? 'Subscriber'
+                  : 'Subscribers'
+              }}</span>
+            </p>
           </div>
         </div>
       </section>
@@ -143,7 +150,11 @@ export default {
         thumbnails: item.snippet.thumbnails,
       };
     });
-    this.Videos = searching.items.map((item) => {
+    let videosIds = searching.items.map((item) => item.id.videoId).join(',');
+    const videosUrl = `${this.api.baseUrl}videos?part=${this.api.part}&key=${this.api.key}&id=${videosIds}`;
+    let videosReq = await fetch(videosUrl);
+    let videosRes = await videosReq.json();
+    this.Videos = videosRes.items.map((item) => {
       return {
         duration: this.convertTime(item.contentDetails.duration),
         id: item.id,
@@ -225,9 +236,14 @@ export default {
 </script>
 
 <style lang="sass">
+$medium: 900px
 .channelWrapper
+  @media (min-width: $medium)
+    padding: 8em 14em
   &__header
     width: 100vw
+    @media (min-width: $medium)
+      width: 100%
     img
       width: 100%
       display: block
@@ -266,4 +282,22 @@ export default {
           color: red
         p
           color: #4c4c4c
+        span
+          font-size: .75em
+.playlistWrapper
+  padding: .5em
+  @media (min-width: $medium)
+    padding: 1em 14em
+  h2
+    font-size: 2rem
+    color: #4c4c4c
+    padding: 0 .25em
+.videoWrapper
+  padding: .5em
+  @media (min-width: $medium)
+    padding: 1em 14em
+  h2
+    font-size: 2rem
+    color: #4c4c4c
+    padding: 0 .25em
 </style>
