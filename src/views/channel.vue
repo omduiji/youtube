@@ -1,7 +1,6 @@
 <template>
   <div>
-    <Loader v-if="loaderCompStatus"></Loader>
-    <main class="channelWrapper" v-else>
+    <main class="channelWrapper">
       <header class="channelWrapper__header">
         <img
           :src="channelData.snippet.thumbnails.medium.url"
@@ -25,19 +24,49 @@
           </h1>
           <div class="channelWrapper__body__details__subscripeBtn">
             <button>SUBSCRIBE</button>
-            <p>{{ channelData.statistics.subscriberCount }}</p>
+            <!-- <p>{{ channelData.statistics.subscriberCount | viewsFilter }}</p> -->
           </div>
         </div>
       </section>
     </main>
+    <section class="playlistWrapper">
+      <h2 class="playlistWrapper__title">Playlists</h2>
+      <VideosList
+        v-for="(playlist, index) in Playlists"
+        :key="index"
+        :smallScreenThumb="playlist.thumbnails.default.url"
+        :mediumScreenThumb="playlist.thumbnails.medium.url"
+        :largeScreenThumb="playlist.thumbnails.medium.url"
+        :channelTitle="playlist.title"
+        :playlistVideoCount="playlist.itemCount"
+        type="playlist"
+      ></VideosList>
+    </section>
+    <section class="videoWrapper">
+      <h2 class="videoWrapper__title">Videos</h2>
+      <VideosList
+        v-for="(video, index) in Videos"
+        :key="index"
+        :duration="video.duration"
+        :smallScreenThumb="video.thumpnails.default.url"
+        :mediumScreenThumb="video.thumpnails.medium.url"
+        :largeScreenThumb="video.thumpnails.medium.url"
+        :title="video.videoTitle"
+        :channelTitle="video.channelTitle"
+        :viewsCount="video.views"
+        :videoId="video.id"
+        :type="video.type"
+        :videoDescription="video.description"
+      ></VideosList>
+    </section>
   </div>
 </template>
 
 <script>
-import Loader from '@/components/loader.vue';
+import VideosList from '@/components/videosList.vue';
 
 export default {
-  components: { Loader },
+  components: { VideosList },
 
   data() {
     return {
@@ -49,21 +78,148 @@ export default {
         nextPageTokenSearch: '',
         maxResults: 25,
       },
-      channelData: {},
+      channelData: {
+        snippet: {
+          thumbnails: {
+            medium: {
+              url: '',
+            },
+            default: {
+              url: '',
+            },
+          },
+        },
+      },
+      playlistToken: '',
+      searchToken: '',
+      Playlists: [],
+      Videos: [],
     };
   },
-  async mounted() {
+  async created() {
     this.loaderCompStatus = true;
-    const cahnnels = `${this.api.baseUrl}channels?part=${this.api.part}&key=${this.api.key}&id=${this.$route.params.id}`;
-    const cahnnelsSections = `${this.api.baseUrl}channelSections?part=snippet,contentDetails&key=${this.api.key}&channelId=${this.$route.params.id}`;
-    let res = await Promise.all([fetch(cahnnels), fetch(cahnnelsSections)]);
-    let [channelData, ownedChannels] = await Promise.all(
+    const urlParams = new URLSearchParams();
+    urlParams.append('maxResults', this.api.maxResults);
+    urlParams.append('key', this.api.key);
+    urlParams.append('channelId', this.$route.params.id);
+
+    const requests = [
+      {
+        name: 'channelSections',
+        part: 'snippet,contentDetails',
+      },
+      {
+        name: 'search',
+        part: 'snippet',
+        type: 'video',
+      },
+      {
+        name: 'playlists',
+        part: 'snippet,contentDetails,player',
+      },
+    ];
+    let urls = [];
+
+    requests.forEach((item) => {
+      urls.push(
+        `${this.api.baseUrl}${item.name}?part=${item.part}&type=${item.type}&${urlParams}`
+      );
+    });
+    const channels = `${this.api.baseUrl}channels?part=${this.api.part}&key=${this.api.key}&id=${this.$route.params.id}`;
+    urls.push(channels);
+
+    let res = await Promise.all(urls.map((item) => fetch(item)));
+    let [sections, searching, playlists, channelData] = await Promise.all(
       res.map((r) => r.json())
     );
     this.channelData = channelData.items[0];
-    console.log(ownedChannels);
-
+    console.log(sections);
+    console.log(searching);
+    // console.log(playlists);
+    this.Playlists = playlists.items.map((item) => {
+      return {
+        itemCount: item.contentDetails.itemCount,
+        title: item.snippet.title,
+        thumbnails: item.snippet.thumbnails,
+      };
+    });
+    this.Videos = searching.items.map((item) => {
+      return {
+        duration: this.convertTime(item.contentDetails.duration),
+        id: item.id,
+        channelTitle: item.snippet.channelTitle,
+        videoTitle: item.snippet.title,
+        thumpnails: item.snippet.thumbnails,
+        views: item.statistics.viewCount,
+        type: 'video',
+        description: item.snippet.description,
+      };
+    });
+    console.log(this.Playlists, 'playlists');
+    this.playlistToken = playlists.nextPageToken;
+    this.searchToken = searching.nextPageToken;
+    // this.getPlaylists(playlists, this.playlistToken);
+    // this.getSearchingResults(searching, this.searchToken);
     this.loaderCompStatus = false;
+  },
+  methods: {
+    getPlaylists() {},
+    convertTime(duration) {
+      let a = duration.match(/\d+/g);
+
+      if (
+        duration.indexOf('M') >= 0 &&
+        duration.indexOf('H') == -1 &&
+        duration.indexOf('S') == -1
+      ) {
+        a = [0, a[0], 0];
+      }
+
+      if (duration.indexOf('H') >= 0 && duration.indexOf('M') == -1) {
+        a = [a[0], 0, a[1]];
+      }
+      if (
+        duration.indexOf('H') >= 0 &&
+        duration.indexOf('M') == -1 &&
+        duration.indexOf('S') == -1
+      ) {
+        a = [a[0], 0, 0];
+      }
+
+      duration = 0;
+
+      if (a.length == 3) {
+        duration = duration + parseInt(a[0]) * 3600;
+        duration = duration + parseInt(a[1]) * 60;
+        duration = duration + parseInt(a[2]);
+      }
+
+      if (a.length == 2) {
+        duration = duration + parseInt(a[0]) * 60;
+        duration = duration + parseInt(a[1]);
+      }
+
+      if (a.length == 1) {
+        duration = duration + parseInt(a[0]);
+      }
+
+      duration = Number(duration);
+      let h = Math.floor(duration / 3600);
+      let m = Math.floor((duration % 3600) / 60);
+      let s = Math.floor((duration % 3600) % 60);
+
+      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
+      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '';
+      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
+      return hDisplay + mDisplay + sDisplay;
+    },
+  },
+  filters: {
+    viewsFilter: function (value) {
+      return typeof value !== String
+        ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : '';
+    },
   },
 };
 </script>
@@ -71,15 +227,16 @@ export default {
 <style lang="sass">
 .channelWrapper
   &__header
-    background-color: yellow
     width: 100vw
+    img
+      width: 100%
+      display: block
   &__body
     position: relative
     &__logo
       width: 50px
       height: 50px
       border-radius: 50%
-      border: 3px solid blue
       position: absolute
       top: -30%
       left: .75em
@@ -89,6 +246,7 @@ export default {
         border-radius: 50%
     &__details
       padding: 1.5em
+      padding-left: 3em
       display: flex
       flex-direction: column
       align-items: flex-start
@@ -103,7 +261,7 @@ export default {
         padding-top: .5em
         button
           border: none
-          padding: 0 .5em
+          margin-right: .25em
           font-size: 1rem
           color: red
         p

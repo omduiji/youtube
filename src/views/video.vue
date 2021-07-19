@@ -78,7 +78,10 @@
         <p class="videoContainer__channel__desc" v-else>
           {{ videoDetails.snippet.description }}
         </p>
-        <button @click="videoShortDescription = !videoShortDescription">
+        <button
+          @click="videoShortDescription = !videoShortDescription"
+          v-if="videoDescription"
+        >
           Show {{ videoShortDescription ? 'More' : 'Less' }}
         </button>
         <ul>
@@ -123,7 +126,17 @@ export default {
   data() {
     return {
       relatedVideos: [],
-      videoDetails: {},
+      videoDetails: {
+        player: {
+          embedHtml: '',
+        },
+        snippet: {
+          title: '',
+        },
+        statistics: {
+          viewCount: '',
+        },
+      },
       showFooter: false,
       videoDescription: '',
       videoShortDescription: true,
@@ -141,11 +154,17 @@ export default {
     try {
       let list = await fetch(apiUrl);
       let response = await list.json();
-      this.videoDetails = response.items[0];
-      this.videoDescription = response.items[0].snippet.description.substring(
-        0,
-        250
-      );
+      this.videoDetails = await response.items[0];
+      if (response.items[0].snippet.description.length > 400) {
+        this.videoDescription = response.items[0].snippet.description.substring(
+          0,
+          400
+        );
+        this.videoShortDescription = true;
+      }
+      this.videoShortDescription = false;
+
+      console.log(response.items[0]);
     } catch (err) {
       console.log(err);
     }
@@ -409,39 +428,41 @@ $medium: 900px
           li + li
               margin-left: 1em
   &__channel
-    display: flex
-    flex-direction: column
-    padding: 2em 0
-    border-bottom: 1px solid #7C7C7C
-    &__title
-      cursor: pointer
-      font-size: 1.5rem
-      &:hover
-        color: blue
-    &__desc
-      line-height: 1.7
-      margin-bottom: .75em
-    button
-      background-color: transparent
-      padding: .25em
-      font-size: 1rem
-      border: none
-      outline: none
-      cursor: pointer
-      align-self: flex-start
-      transition: all 100ms linear
-      margin-bottom: .75em
-      &:hover
-        color: blue
-    ul
-      display: flex
-      flex-wrap: wrap
-      align-items: center
-      list-style: none
-      li
-        padding: .25em
-        color: blue
-        cursor: pointer
-        &:hover
-          color: red
+      display: none
+      @media (min-width: $medium)
+        display: flex
+        flex-direction: column
+        padding: 2em 0
+        border-bottom: 1px solid #7C7C7C
+        &__title
+          cursor: pointer
+          font-size: 1.5rem
+          &:hover
+            color: blue
+        &__desc
+          line-height: 1.7
+          margin-bottom: .75em
+        button
+          background-color: transparent
+          padding: .25em
+          font-size: 1rem
+          border: none
+          outline: none
+          cursor: pointer
+          align-self: flex-start
+          transition: all 100ms linear
+          margin-bottom: .75em
+          &:hover
+            color: blue
+        ul
+          display: flex
+          flex-wrap: wrap
+          align-items: center
+          list-style: none
+          li
+            padding: .25em
+            color: blue
+            cursor: pointer
+            &:hover
+              color: red
 </style>

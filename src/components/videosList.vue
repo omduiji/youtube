@@ -1,6 +1,6 @@
 <template>
   <div>
-    <article class="videos" @click="routeToVideo">
+    <article class="videos" @click="routeToParent">
       <div
         class="videos__img"
         :data-duration="duration"
@@ -109,7 +109,9 @@
           {{ viewsCount | viewsFilter }} views.{{ publishDate | publishFilter }}
         </p>
         <p class="videos__details__owner">{{ channelTitle }}</p>
-        <p class="videos__details__description">{{ videoDescription }}</p>
+        <p class="videos__details__description" v-if="type == 'video'">
+          {{ videoDescription }}
+        </p>
         <p class="videos__details__views" v-if="type == 'video'">
           {{ viewsCount | viewsFilter }} views
         </p>
@@ -121,28 +123,28 @@
 <script>
 export default {
   props: [
-    "duration",
-    "smallScreenThumb",
-    "mediumScreenThumb",
-    "largeScreenThumb",
-    "title",
-    "channelTitle",
-    "viewsCount",
-    "videoId",
-    "videoDescription",
-    "publishDate",
-    "listChannelTitle",
-    "channelSubscribers",
-    "channelVideos",
-    "playListTitle",
-    "playlistVideoCount",
-    "type",
+    'duration',
+    'smallScreenThumb',
+    'mediumScreenThumb',
+    'largeScreenThumb',
+    'title',
+    'channelTitle',
+    'viewsCount',
+    'videoId',
+    'videoDescription',
+    'publishDate',
+    'listChannelTitle',
+    'channelSubscribers',
+    'channelVideos',
+    'playListTitle',
+    'playlistVideoCount',
+    'type',
   ],
   filters: {
     viewsFilter: function (value) {
       return typeof value !== String
-        ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        : "";
+        ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : '';
     },
     publishFilter: function (value) {
       let d = new Date(value);
@@ -172,18 +174,18 @@ export default {
     },
   },
   methods: {
-    routeToVideo() {
-      if (this.type === "video") {
-        if (this.$route.name === "Video") {
+    routeToParent() {
+      if (this.type === 'video') {
+        if (this.$route.name === 'Video') {
           this.$route.params.id = this.videoId;
           setTimeout(() => {
             window.location.reload();
           }, 0);
         }
-        this.$router.push({ name: "Video", params: { id: this.videoId } });
+        this.$router.push({ name: 'Video', params: { id: this.videoId } });
       }
       if (this.type === 'channel') {
-        this.$router.push({ name: "Channel", params: { id: this.videoId } });
+        this.$router.push({ name: 'Channel', params: { id: this.videoId } });
       }
     },
   },
