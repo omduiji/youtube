@@ -150,7 +150,23 @@ export default {
     };
   },
   async created() {
-    const apiUrl = `${this.api.baseUrl}videos?part=${this.api.part}&key=${this.api.key}&id=${this.$route.params.id}`;
+    console.log(this.$route.params);
+    let playlistsResult;
+    if (this.$route.params.playlistId) {
+      const playList = `${this.api.baseUrl}playlistItems?part=snippet,contentDetails,status&key=${this.api.key}&playlistId=${this.$route.params.playlistId}`;
+      let getPlayList = await fetch(playList);
+      playlistsResult = await getPlayList.json();
+      console.log(playlistsResult);
+    }
+    const apiUrl = `${this.api.baseUrl}videos?part=${this.api.part}&key=${
+      this.api.key
+    }&id=${
+      this.$route.params.playlistId
+        ? playlistsResult.items
+            .map((item) => item.snippet.resourceId.videoId)
+            .join(',')
+        : this.$route.params.id
+    }`;
     try {
       let list = await fetch(apiUrl);
       let response = await list.json();
@@ -164,13 +180,24 @@ export default {
       }
       this.videoShortDescription = false;
 
-      console.log(response.items[0]);
+      this.relatedVideos = response.items.map((item) => {
+        return {
+          duration: this.convertTime(item.contentDetails.duration),
+          id: item.id,
+          channelTitle: item.snippet.channelTitle,
+          videoTitle: item.snippet.title,
+          thumpnails: item.snippet.thumbnails,
+          views: item.statistics.viewCount,
+          videoDescription: item.snippet.description,
+        };
+      });
+      // console.log(response.items[0]);
     } catch (err) {
       console.log(err);
     }
   },
   async mounted() {
-    await this.getRelatedVideos();
+    if (!this.$route.params.playlistId) await this.getRelatedVideos();
   },
   methods: {
     routeToChannel() {
@@ -437,6 +464,7 @@ $medium: 900px
         &__title
           cursor: pointer
           font-size: 1.5rem
+          margin-bottom: 1em
           &:hover
             color: blue
         &__desc

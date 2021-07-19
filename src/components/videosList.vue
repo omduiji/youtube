@@ -139,6 +139,7 @@ export default {
     'playListTitle',
     'playlistVideoCount',
     'type',
+    'playlistId',
   ],
   filters: {
     viewsFilter: function (value) {
@@ -186,6 +187,12 @@ export default {
       }
       if (this.type === 'channel') {
         this.$router.push({ name: 'Channel', params: { id: this.videoId } });
+      }
+      if (this.type === 'playlist') {
+        this.$router.push({
+          name: 'Video',
+          params: { playlistId: this.playlistId },
+        });
       }
     },
   },

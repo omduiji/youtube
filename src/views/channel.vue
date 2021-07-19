@@ -46,6 +46,7 @@
         :largeScreenThumb="playlist.thumbnails.medium.url"
         :channelTitle="playlist.title"
         :playlistVideoCount="playlist.itemCount"
+        :playlistId="playlist.id"
         type="playlist"
       ></VideosList>
     </section>
@@ -148,6 +149,7 @@ export default {
         itemCount: item.contentDetails.itemCount,
         title: item.snippet.title,
         thumbnails: item.snippet.thumbnails,
+        id: item.id,
       };
     });
     let videosIds = searching.items.map((item) => item.id.videoId).join(',');
@@ -169,8 +171,6 @@ export default {
     console.log(this.Playlists, 'playlists');
     this.playlistToken = playlists.nextPageToken;
     this.searchToken = searching.nextPageToken;
-    // this.getPlaylists(playlists, this.playlistToken);
-    // this.getSearchingResults(searching, this.searchToken);
     this.loaderCompStatus = false;
   },
   methods: {

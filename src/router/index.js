@@ -14,7 +14,7 @@ const routes = [
     component: Home,
   },
   {
-    path: '/video/:id',
+    path: '/video/:id/:playlist',
     name: 'Video',
     component: Video,
   },
