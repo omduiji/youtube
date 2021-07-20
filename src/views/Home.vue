@@ -47,7 +47,7 @@ export default {
         order: 'viewCount',
         maxResults: 20,
         regionCode: 'US',
-        key: 'AIzaSyDoGaVf9MN-JswI8VvddPMMlHsIt3TfEdI',
+        key: 'AIzaSyAlc0f_0RHg4B0eeu3e47v9AM0_LIriNI4',
         prevPageToken: '',
         nextPageToken: '',
         videoEmbeddable: 'true',
@@ -155,6 +155,7 @@ export default {
             videoTitle: item.snippet.title,
             thumpnails: item.snippet.thumbnails,
             views: item.statistics.viewCount,
+            type: 'video',
           };
         });
         this.api.nextPageToken = response.nextPageToken;

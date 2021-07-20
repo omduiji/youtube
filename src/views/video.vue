@@ -96,14 +96,15 @@
         v-for="(video, index) in relatedVideos"
         :key="index"
         :duration="video.duration"
-        :smallScreenThumb="video.thumpnails.default.url"
-        :mediumScreenThumb="video.thumpnails.medium.url"
-        :largeScreenThumb="video.thumpnails.medium.url"
+        :smallScreenThumb="video.thumbnails.default.url"
+        :mediumScreenThumb="video.thumbnails.medium.url"
+        :largeScreenThumb="video.thumbnails.medium.url"
         :title="video.videoTitle"
         :channelTitle="video.channelTitle"
         :viewsCount="video.views"
         :videoId="video.id"
         :videoDescription="video.videoDescription"
+        :type="video.type"
       ></VideosList>
     </div>
     <Observer @intersect="intersected" />
@@ -143,20 +144,20 @@ export default {
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
         part: 'snippet,contentDetails,statistics,player',
-        key: 'AIzaSyDoGaVf9MN-JswI8VvddPMMlHsIt3TfEdI',
+        key: 'AIzaSyAlc0f_0RHg4B0eeu3e47v9AM0_LIriNI4',
         nextPageTokenSearch: '',
         maxResults: 25,
       },
     };
   },
   async created() {
-    console.log(this.$route.params);
+    // console.log(this.$route.params);
     let playlistsResult;
     if (this.$route.params.playlistId) {
-      const playList = `${this.api.baseUrl}playlistItems?part=snippet,contentDetails,status&key=${this.api.key}&playlistId=${this.$route.params.playlistId}`;
+      const playList = `${this.api.baseUrl}playlistItems?part=snippet,contentDetails,status&key=${this.api.key}&playlistId=${this.$route.params.playlistId}&maxResults=${this.api.maxResults}`;
       let getPlayList = await fetch(playList);
       playlistsResult = await getPlayList.json();
-      console.log(playlistsResult);
+      // console.log(playlistsResult);
     }
     const apiUrl = `${this.api.baseUrl}videos?part=${this.api.part}&key=${
       this.api.key
@@ -186,12 +187,13 @@ export default {
           id: item.id,
           channelTitle: item.snippet.channelTitle,
           videoTitle: item.snippet.title,
-          thumpnails: item.snippet.thumbnails,
+          thumbnails: item.snippet.thumbnails,
           views: item.statistics.viewCount,
           videoDescription: item.snippet.description,
+          type: 'video',
         };
       });
-      // console.log(response.items[0]);
+      // console.log(this.relatedVideos, 'playlist videos');
     } catch (err) {
       console.log(err);
     }
@@ -207,9 +209,10 @@ export default {
       });
     },
     async intersected() {
-      await this.getRelatedVideos();
+      if (!this.$route.params.playlistId) await this.getRelatedVideos();
     },
     async getRelatedVideos() {
+      // console.log('scrolled enter');
       const { baseUrl, key, nextPageTokenSearch, maxResults } = this.api;
       const part = 'snippet';
       const type = 'video';
@@ -225,6 +228,8 @@ export default {
           ...(await this.listRelatedVideos(relatedVideosIds)),
         ];
         this.api.nextPageTokenSearch = response.nextPageToken;
+
+        console.log(this.relatedVideos, 'scrolled');
       } catch (err) {
         console.log(err);
       }
@@ -242,9 +247,10 @@ export default {
             id: item.id,
             channelTitle: item.snippet.channelTitle,
             videoTitle: item.snippet.title,
-            thumpnails: item.snippet.thumbnails,
+            thumbnails: item.snippet.thumbnails,
             views: item.statistics.viewCount,
             videoDescription: item.snippet.description,
+            type: 'video',
           };
         });
       } catch (err) {

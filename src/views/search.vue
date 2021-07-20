@@ -53,7 +53,7 @@ export default {
         part: 'snippet',
         maxResults: 10,
         regionCode: 'US',
-        key: 'AIzaSyDoGaVf9MN-JswI8VvddPMMlHsIt3TfEdI',
+        key: 'AIzaSyAlc0f_0RHg4B0eeu3e47v9AM0_LIriNI4',
         channelToken: '',
         videoToken: '',
         playlistToken: '',

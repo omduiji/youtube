@@ -36,7 +36,7 @@
         </div>
       </section>
     </main>
-    <section class="playlistWrapper">
+    <section class="playlistWrapper" v-if="Playlists[0]">
       <h2 class="playlistWrapper__title">Playlists</h2>
       <VideosList
         v-for="(playlist, index) in Playlists"
@@ -50,7 +50,7 @@
         type="playlist"
       ></VideosList>
     </section>
-    <section class="videoWrapper">
+    <section class="videoWrapper" v-if="Videos[0]">
       <h2 class="videoWrapper__title">Videos</h2>
       <VideosList
         v-for="(video, index) in Videos"
@@ -82,11 +82,14 @@ export default {
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
         part: 'snippet,contentDetails,statistics',
-        key: 'AIzaSyDoGaVf9MN-JswI8VvddPMMlHsIt3TfEdI',
+        key: 'AIzaSyAlc0f_0RHg4B0eeu3e47v9AM0_LIriNI4',
         nextPageTokenSearch: '',
         maxResults: 25,
       },
       channelData: {
+        statistics: {
+          subscriberCount: '',
+        },
         snippet: {
           thumbnails: {
             medium: {
@@ -142,7 +145,7 @@ export default {
     );
     this.channelData = channelData.items[0];
     console.log(sections);
-    console.log(searching);
+    console.log(channelData.items[0], 'chdata');
     // console.log(playlists);
     this.Playlists = playlists.items.map((item) => {
       return {
@@ -150,6 +153,7 @@ export default {
         title: item.snippet.title,
         thumbnails: item.snippet.thumbnails,
         id: item.id,
+        type: 'playlist',
       };
     });
     let videosIds = searching.items.map((item) => item.id.videoId).join(',');

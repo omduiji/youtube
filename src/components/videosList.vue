@@ -262,7 +262,7 @@ $medium: 900px
       background-color: #4c4c4c
       font-size: 12px
       padding: .25em
-      min-width: 35px
+      min-width: 40px
 
   &__details
     font-size: 1rem
