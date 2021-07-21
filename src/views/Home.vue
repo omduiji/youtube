@@ -41,13 +41,13 @@ export default {
       mobile: false,
       videosList: [],
       api: {
-        baseUrl: 'https://www.googleapis.com/youtube/v3/videos?',
+        baseUrl: `${process.env.VUE_APP_BASE_URL}/videos?`,
         part: 'snippet,contentDetails,statistics',
         chart: 'mostPopular',
         order: 'viewCount',
         maxResults: 20,
         regionCode: 'US',
-        key: 'AIzaSyBMZdoHJUl8U9as-6LZ7m9XynYvFBCcaXk',
+        key: process.env.VUE_APP_API_KEY,
         prevPageToken: '',
         nextPageToken: '',
         videoEmbeddable: 'true',
@@ -64,7 +64,7 @@ export default {
   },
 
   async created() {
-    const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}&videoEmbeddable=${this.api.videoEmbeddable}`;
+    const apiUrl = `${this.api.baseUrl}/part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}&videoEmbeddable=${this.api.videoEmbeddable}`;
     try {
       let list = await fetch(apiUrl);
       let response = await list.json();
@@ -143,7 +143,7 @@ export default {
     async getMoreData() {
       this.loaderCompStatus = false;
       // console.log(this.loaderStatus, 'worked');
-      const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}`;
+      const apiUrl = `${this.api.baseUrl}/part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}`;
       try {
         let list = await fetch(apiUrl);
         let response = await list.json();

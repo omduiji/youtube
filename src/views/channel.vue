@@ -80,9 +80,9 @@ export default {
     return {
       loaderCompStatus: false,
       api: {
-        baseUrl: 'https://www.googleapis.com/youtube/v3/',
+        baseUrl: process.env.VUE_APP_BASE_URL,
         part: 'snippet,contentDetails,statistics',
-        key: 'AIzaSyBMZdoHJUl8U9as-6LZ7m9XynYvFBCcaXk',
+        key: process.env.VUE_APP_API_KEY,
         nextPageTokenSearch: '',
         maxResults: 25,
       },
@@ -133,10 +133,10 @@ export default {
 
     requests.forEach((item) => {
       urls.push(
-        `${this.api.baseUrl}${item.name}?part=${item.part}&type=${item.type}&${urlParams}`
+        `${this.api.baseUrl}/${item.name}?part=${item.part}&type=${item.type}&${urlParams}`
       );
     });
-    const channels = `${this.api.baseUrl}channels?part=${this.api.part}&key=${this.api.key}&id=${this.$route.params.id}`;
+    const channels = `${this.api.baseUrl}/channels?part=${this.api.part}&key=${this.api.key}&id=${this.$route.params.id}`;
     urls.push(channels);
 
     let res = await Promise.all(urls.map((item) => fetch(item)));
@@ -157,7 +157,7 @@ export default {
       };
     });
     let videosIds = searching.items.map((item) => item.id.videoId).join(',');
-    const videosUrl = `${this.api.baseUrl}videos?part=${this.api.part}&key=${this.api.key}&id=${videosIds}`;
+    const videosUrl = `${this.api.baseUrl}/videos?part=${this.api.part}&key=${this.api.key}&id=${videosIds}`;
     let videosReq = await fetch(videosUrl);
     let videosRes = await videosReq.json();
     this.Videos = videosRes.items.map((item) => {

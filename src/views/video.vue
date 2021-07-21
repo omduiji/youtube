@@ -151,9 +151,9 @@ export default {
       videoDescription: '',
       videoShortDescription: true,
       api: {
-        baseUrl: 'https://www.googleapis.com/youtube/v3/',
+        baseUrl: process.env.VUE_APP_BASE_URL,
         part: 'snippet,contentDetails,statistics,player',
-        key: 'AIzaSyBMZdoHJUl8U9as-6LZ7m9XynYvFBCcaXk',
+        key: process.env.VUE_APP_API_KEY,
         nextPageTokenSearch: '',
         maxResults: 25,
       },
@@ -163,14 +163,14 @@ export default {
     // console.log(this.$route.params);
     let playlistsResult;
     if (this.$route.params.playlistId) {
-      const playList = `${this.api.baseUrl}playlistItems?part=snippet,contentDetails,status&key=${this.api.key}&playlistId=${this.$route.params.playlistId}&maxResults=${this.api.maxResults}`;
+      const playList = `${this.api.baseUrl}/playlistItems?part=snippet,contentDetails,status&key=${this.api.key}&playlistId=${this.$route.params.playlistId}&maxResults=${this.api.maxResults}`;
       let getPlayList = await fetch(playList);
       playlistsResult = await getPlayList.json();
       this.playlistTokenList = playlistsResult.nextPageToken;
       // console.log(playlistsResult);
       this.playlistVideoTitle = true;
     }
-    const apiUrl = `${this.api.baseUrl}videos?part=${this.api.part}&key=${
+    const apiUrl = `${this.api.baseUrl}/videos?part=${this.api.part}&key=${
       this.api.key
     }&id=${
       this.$route.params.playlistId
@@ -215,11 +215,11 @@ export default {
   methods: {
     async getPlaylistVideos() {
       if (this.playlistTokenList !== undefined) {
-        const playList = `${this.api.baseUrl}playlistItems?part=snippet,contentDetails,status&key=${this.api.key}&playlistId=${this.$route.params.playlistId}&maxResults=${this.api.maxResults}&pageToken=${this.playlistTokenList}`;
+        const playList = `${this.api.baseUrl}/playlistItems?part=snippet,contentDetails,status&key=${this.api.key}&playlistId=${this.$route.params.playlistId}&maxResults=${this.api.maxResults}&pageToken=${this.playlistTokenList}`;
         let getPlayList = await fetch(playList);
         let playlistsResult = await getPlayList.json();
         this.playlistTokenList = playlistsResult.nextPageToken || undefined;
-        const apiUrl = `${this.api.baseUrl}videos?part=${this.api.part}&key=${
+        const apiUrl = `${this.api.baseUrl}/videos?part=${this.api.part}&key=${
           this.api.key
         }&id=${playlistsResult.items
           .map((item) => item.snippet.resourceId.videoId)
@@ -262,7 +262,7 @@ export default {
       const { baseUrl, key, nextPageTokenSearch, maxResults } = this.api;
       const part = 'snippet';
       const type = 'video';
-      const apiUrl = `${baseUrl}search?part=${part}&key=${key}&relatedToVideoId=${this.$route.params.id}&type=${type}&pageToken=${nextPageTokenSearch}&maxResults=${maxResults}`;
+      const apiUrl = `${baseUrl}/search?part=${part}&key=${key}&relatedToVideoId=${this.$route.params.id}&type=${type}&pageToken=${nextPageTokenSearch}&maxResults=${maxResults}`;
       try {
         let list = await fetch(apiUrl);
         let response = await list.json();
@@ -283,7 +283,7 @@ export default {
     },
     async listRelatedVideos(ids) {
       const { baseUrl, key, part } = this.api;
-      const apiUrl = `${baseUrl}videos?part=${part}&key=${key}&id=${ids}`;
+      const apiUrl = `${baseUrl}/videos?part=${part}&key=${key}&id=${ids}`;
       let relatedVideos = [];
       try {
         let list = await fetch(apiUrl);
@@ -386,7 +386,7 @@ $medium: 900px
       padding: .25em
   @media (min-width: $medium)
     padding: 0 15em
-    padding-top: 2em
+    padding-top: 7em
 
   &__video
       width: 100%

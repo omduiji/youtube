@@ -61,11 +61,11 @@ export default {
       notAvailabale: false,
       searchResults: [],
       api: {
-        baseUrl: 'https://www.googleapis.com/youtube/v3/',
+        baseUrl: process.env.VUE_APP_BASE_URL,
         part: 'snippet',
         maxResults: 10,
         regionCode: 'US',
-        key: 'AIzaSyBMZdoHJUl8U9as-6LZ7m9XynYvFBCcaXk',
+        key: process.env.VUE_APP_API_KEY,
         channelToken: '',
         videoToken: '',
         playlistToken: '',
@@ -143,7 +143,7 @@ export default {
       }
       types.forEach((type) => {
         urls.push(
-          `${this.api.baseUrl}search?&type=${type}&pageToken=${
+          `${this.api.baseUrl}/search?&type=${type}&pageToken=${
             dynamicTokens[`${type}`]
           }&${urlParams}`
         );
@@ -204,21 +204,21 @@ export default {
       types.forEach((type) => {
         if (type === 'channel') {
           urls.push(
-            `${baseUrl}${type}s?part=${
+            `${baseUrl}/${type}s?part=${
               parts[type]
             }&key=${key}&id=${channelIds.join(',')}`
           );
         }
         if (type === 'video') {
           urls.push(
-            `${baseUrl}${type}s?part=${
+            `${baseUrl}/${type}s?part=${
               parts[type]
             }&key=${key}&id=${videoIds.join(',')}`
           );
         }
         if (type === 'playlist') {
           urls.push(
-            `${baseUrl}${type}s?part=${
+            `${baseUrl}/${type}s?part=${
               parts[type]
             }&key=${key}&id=${playlistIds.join(',')}`
           );
