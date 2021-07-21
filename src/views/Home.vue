@@ -64,7 +64,7 @@ export default {
   },
 
   async created() {
-    const apiUrl = `${this.api.baseUrl}/part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}&videoEmbeddable=${this.api.videoEmbeddable}`;
+    const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}&videoEmbeddable=${this.api.videoEmbeddable}`;
     try {
       let list = await fetch(apiUrl);
       let response = await list.json();
@@ -143,7 +143,7 @@ export default {
     async getMoreData() {
       this.loaderCompStatus = false;
       // console.log(this.loaderStatus, 'worked');
-      const apiUrl = `${this.api.baseUrl}/part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}`;
+      const apiUrl = `${this.api.baseUrl}part=${this.api.part}&chart=${this.api.chart}&order=${this.api.order}&regionCode=${this.api.regionCode}&maxResults=${this.api.maxResults}&key=${this.api.key}&pageToken=${this.api.nextPageToken}`;
       try {
         let list = await fetch(apiUrl);
         let response = await list.json();
