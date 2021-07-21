@@ -1,37 +1,37 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
-import Video from '../views/video.vue';
-import Channel from '../views/channel.vue';
-import Search from '../views/search.vue';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import Video from "../views/video.vue";
+import Channel from "../views/channel.vue";
+import Search from "../views/search.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
+    path: "/",
+    name: "Home",
     component: Home,
   },
   {
-    path: '/video/:id/:playlist',
-    name: 'Video',
+    path: "/video/:id/:playlist",
+    name: "Video",
     component: Video,
   },
   {
-    path: '/channel/:id',
-    name: 'Channel',
+    path: "/channel/:id",
+    name: "Channel",
     component: Channel,
   },
   {
-    path: '/search/:query',
-    name: 'Search',
+    path: "/search/:query",
+    name: "Search",
     component: Search,
   },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
   routes,
 });

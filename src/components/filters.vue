@@ -103,94 +103,94 @@
 </template>
 
 <script>
-import Close from '@/assets/close.svg';
-import FilterIcon from '@/assets/filter.svg';
+import Close from "@/assets/close.svg";
+import FilterIcon from "@/assets/filter.svg";
 export default {
   created() {
     // console.log(this.$route);
-    this.results = window.localStorage.getItem('count');
+    this.results = window.localStorage.getItem("count");
     // if (this.$route.name == 'Video') window.localStorage.clear();
     // if (this.$route.name == 'Home') window.localStorage.getItem('count');
   },
 
   data() {
     return {
-      results: '',
+      results: "",
       hideWrapper: true,
-      searchByType: '',
-      searchByPeriod: 'all',
-      searchByOrder: 'relevance',
+      searchByType: "",
+      searchByPeriod: "all",
+      searchByOrder: "relevance",
       types: [
-        { name: 'All', value: '', iconStatus: false, parent: 'searchByType' },
+        { name: "All", value: "", iconStatus: false, parent: "searchByType" },
         {
-          name: 'Video',
-          value: 'video',
+          name: "Video",
+          value: "video",
           iconStatus: false,
-          parent: 'searchByType',
+          parent: "searchByType",
         },
         {
-          name: 'Channel',
-          value: 'channel',
+          name: "Channel",
+          value: "channel",
           iconStatus: false,
-          parent: 'searchByType',
+          parent: "searchByType",
         },
         {
-          name: 'Playlist',
-          value: 'playlist',
+          name: "Playlist",
+          value: "playlist",
           iconStatus: false,
-          parent: 'searchByType',
+          parent: "searchByType",
         },
       ],
       orders: [
         {
-          name: 'Relevence',
-          value: 'relevance',
+          name: "Relevence",
+          value: "relevance",
           iconStatus: false,
-          parent: 'searchByOrder',
+          parent: "searchByOrder",
         },
         {
-          name: 'Upload date',
-          value: 'date',
+          name: "Upload date",
+          value: "date",
           iconStatus: false,
-          parent: 'searchByOrder',
+          parent: "searchByOrder",
         },
         {
-          name: 'View count',
-          value: 'viewCount',
+          name: "View count",
+          value: "viewCount",
           iconStatus: false,
-          parent: 'searchByOrder',
+          parent: "searchByOrder",
         },
         {
-          name: 'Rating',
-          value: 'rating',
+          name: "Rating",
+          value: "rating",
           iconStatus: false,
-          parent: 'searchByOrder',
+          parent: "searchByOrder",
         },
       ],
       times: [
         {
-          name: 'All',
-          value: 'all',
+          name: "All",
+          value: "all",
           iconStatus: false,
-          parent: 'searchByPeriod',
+          parent: "searchByPeriod",
         },
         {
-          name: 'Today',
-          value: 'today',
+          name: "Today",
+          value: "today",
           iconStatus: false,
-          parent: 'searchByPeriod',
+          parent: "searchByPeriod",
         },
         {
-          name: 'This Week',
-          value: 'weekAgo',
+          name: "This Week",
+          value: "weekAgo",
           iconStatus: false,
-          parent: 'searchByPeriod',
+          parent: "searchByPeriod",
         },
         {
-          name: 'This Month',
-          value: 'monthAgo',
+          name: "This Month",
+          value: "monthAgo",
           iconStatus: false,
-          parent: 'searchByPeriod',
+          parent: "searchByPeriod",
         },
       ],
     };
@@ -210,7 +210,7 @@ export default {
       // this.orders.splice(order, 1);
       // this.orders.push(temp);
       // this.orders[tempIndex] = temp;
-      console.log(this.orders[order].iconStatus, 'ooo');
+      console.log(this.orders[order].iconStatus, "ooo");
     },
     sendDate(element) {
       this.times[element].iconStatus = true;
@@ -228,25 +228,25 @@ export default {
       this.searchingByOrder();
     },
     searchingByType() {
-      this.$emit('typeSearch', this.searchByType);
+      this.$emit("typeSearch", this.searchByType);
     },
     searchingByTime() {
-      this.$emit('timeSearch', this.getTimeFormat(this.searchByPeriod));
+      this.$emit("timeSearch", this.getTimeFormat(this.searchByPeriod));
     },
     searchingByOrder() {
-      this.$emit('orderSearch', this.searchByOrder);
+      this.$emit("orderSearch", this.searchByOrder);
     },
     getTimeFormat(value) {
       let publishingObject = {
-        start: '',
-        end: '',
+        start: "",
+        end: "",
       };
       let today = new Date();
-      if (value === 'today') {
+      if (value === "today") {
         publishingObject.start = today.toISOString();
         publishingObject.end = today.toISOString();
       }
-      if (value === 'weekAgo') {
+      if (value === "weekAgo") {
         publishingObject.end = today.toISOString();
         publishingObject.start = new Date(
           today.getFullYear(),
@@ -254,7 +254,7 @@ export default {
           today.getDate() - 7
         ).toISOString();
       }
-      if (value === 'monthAgo') {
+      if (value === "monthAgo") {
         publishingObject.end = new Date(
           today.getFullYear(),
           today.getMonth() + 1,

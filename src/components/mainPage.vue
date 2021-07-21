@@ -10,13 +10,13 @@
 
 <script>
 // import Header from '@/components/header.vue';
-import Filters from '@/components/filters.vue';
+import Filters from "@/components/filters.vue";
 // import Channel from '@/components/channel.vue';
-import VideosList from '@/components/videosList.vue';
-import LoadMore from '@/components/loadMore.vue';
+import VideosList from "@/components/videosList.vue";
+import LoadMore from "@/components/loadMore.vue";
 
 export default {
-  name: 'Main',
+  name: "Main",
   components: {
     // Header,
     Filters,

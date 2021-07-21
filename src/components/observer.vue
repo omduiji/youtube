@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  props: ['options'],
+  props: ["options"],
   data: () => ({
     observer: null,
   }),
@@ -12,7 +12,7 @@ export default {
     const options = this.options || {};
     this.observer = new IntersectionObserver(([entry]) => {
       if (entry && entry.isIntersecting && entry.intersectionRatio > 0) {
-        this.$emit('intersect');
+        this.$emit("intersect");
       }
     }, options);
 

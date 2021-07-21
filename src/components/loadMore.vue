@@ -10,7 +10,7 @@
 export default {
   methods: {
     loadMoareData() {
-      this.$emit('getMoreData');
+      this.$emit("getMoreData");
     },
   },
 };

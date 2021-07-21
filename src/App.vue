@@ -8,31 +8,31 @@
 <script>
 // @ is an alias to /src
 // import MainPage from '@/components/mainPage.vue';
-import Header from './components/header.vue';
+import Header from "./components/header.vue";
 // import { EventBus } from './eventBus';
 
 export default {
   data() {
     return {
-      typeFilter: '',
-      timeFilter: '',
-      orderFilter: '',
+      typeFilter: "",
+      timeFilter: "",
+      orderFilter: "",
     };
   },
-  name: 'Home',
+  name: "Home",
   components: {
     // MainPage,
     Header,
   },
   methods: {
     getParams(params) {
-      if (this.$route.name === 'Search') {
+      if (this.$route.name === "Search") {
         setTimeout(() => {
           window.location.reload();
         }, 0);
       }
       this.$router
-        .push({ name: 'Search', params: { query: params } })
+        .push({ name: "Search", params: { query: params } })
         .catch(() => {});
     },
   },

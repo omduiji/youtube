@@ -36,7 +36,7 @@ export default {};
 }
 
 .sk-fading-circle .sk-circle:before {
-  content: '';
+  content: "";
   display: block;
   margin: 0 auto;
   width: 15%;
