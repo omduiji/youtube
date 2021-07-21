@@ -18,21 +18,15 @@
         </form>
       </header>
     </nav>
-    <Filters
-      @typeSearch="searchedByType"
-      @timeSearch="searchByTime"
-      @orderSearch="searchByOrder"
-    ></Filters>
   </div>
 </template>
 
 <script>
 import Youtube from '@/assets/logo.svg';
 import SearchIcon from '@/assets/search.svg';
-import Filters from '@/components/filters.vue';
 
 export default {
-  components: { Youtube, SearchIcon, Filters },
+  components: { Youtube, SearchIcon },
   data() {
     return {
       search: '',
@@ -41,15 +35,6 @@ export default {
   methods: {
     getSearchQuery() {
       this.$emit('getSearchParams', this.search);
-    },
-    searchedByType(value) {
-      this.$emit('getSearchParamsFilteredByType', value);
-    },
-    searchByTime(value) {
-      this.$emit('getSearchParamsFilteredByTime', value);
-    },
-    searchByOrder(value) {
-      this.$emit('getSearchParamsFilteredByOrder', value);
     },
   },
 };
@@ -137,6 +122,7 @@ $medium: 900px;
     background-color: white
     padding: .5em 15em
     position: fixed
+    top: 0
     z-index: 100000
     box-shadow: 0px 0px 3px 0px rgb(17,17,17)
     width: 100vw

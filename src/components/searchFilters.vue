@@ -3,8 +3,8 @@
     <div class="filters">
       <div class="filters__wrapper">
         <header class="filters__wrapper__header">
-          <p v-if="results && !hideWrapper">
-            About {{ results | viewsFilter }} results
+          <p v-if="searchingResults">
+            About {{ searchingResults | viewsFilter }} results
           </p>
           <p v-else></p>
           <button @click="hideWrapper = !hideWrapper">
@@ -121,7 +121,12 @@ export default {
       searchByPeriod: 'all',
       searchByOrder: 'relevance',
       types: [
-        { name: 'All', value: '', iconStatus: false, parent: 'searchByType' },
+        {
+          name: 'All',
+          value: 'video,playlist,channel',
+          iconStatus: false,
+          parent: 'searchByType',
+        },
         {
           name: 'Video',
           value: 'video',
@@ -200,7 +205,7 @@ export default {
     FilterIcon,
   },
   props: {
-    searchResultsCount: null,
+    searchingResults: null,
   },
   methods: {
     removeOrder(order) {

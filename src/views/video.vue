@@ -92,6 +92,9 @@
       </div>
     </article>
     <div class="videoContainer__listVideos">
+      <p v-if="playlistVideoTitle" class="videoContainer__listVideos__title">
+        Playlist Videos
+      </p>
       <VideosList
         v-for="(video, index) in relatedVideos"
         :key="index"
@@ -108,6 +111,8 @@
       ></VideosList>
     </div>
     <Observer @intersect="intersected" />
+    <LoadMore @getMoreData="getMoreData" v-show="loaderCompStatus"></LoadMore>
+    <Loader v-show="!loaderCompStatus"></Loader>
   </div>
 </template>
 
@@ -122,10 +127,14 @@ import ThumpsDownIcon from '@/assets/thumps-down.svg';
 import Arrow from '@/assets/arrow-down.svg';
 import More from '@/assets/more.svg';
 import Observer from '@/components/observer.vue';
+import LoadMore from '@/components/loadMore.vue';
+import Loader from '@/components/loader.vue';
 
 export default {
   data() {
     return {
+      playlistVideoTitle: false,
+      loaderCompStatus: true,
       relatedVideos: [],
       videoDetails: {
         player: {
@@ -144,7 +153,7 @@ export default {
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
         part: 'snippet,contentDetails,statistics,player',
-        key: 'AIzaSyAlc0f_0RHg4B0eeu3e47v9AM0_LIriNI4',
+        key: 'AIzaSyBMZdoHJUl8U9as-6LZ7m9XynYvFBCcaXk',
         nextPageTokenSearch: '',
         maxResults: 25,
       },
@@ -157,7 +166,9 @@ export default {
       const playList = `${this.api.baseUrl}playlistItems?part=snippet,contentDetails,status&key=${this.api.key}&playlistId=${this.$route.params.playlistId}&maxResults=${this.api.maxResults}`;
       let getPlayList = await fetch(playList);
       playlistsResult = await getPlayList.json();
+      this.playlistTokenList = playlistsResult.nextPageToken;
       // console.log(playlistsResult);
+      this.playlistVideoTitle = true;
     }
     const apiUrl = `${this.api.baseUrl}videos?part=${this.api.part}&key=${
       this.api.key
@@ -202,6 +213,35 @@ export default {
     if (!this.$route.params.playlistId) await this.getRelatedVideos();
   },
   methods: {
+    async getPlaylistVideos() {
+      if (this.playlistTokenList !== undefined) {
+        const playList = `${this.api.baseUrl}playlistItems?part=snippet,contentDetails,status&key=${this.api.key}&playlistId=${this.$route.params.playlistId}&maxResults=${this.api.maxResults}&pageToken=${this.playlistTokenList}`;
+        let getPlayList = await fetch(playList);
+        let playlistsResult = await getPlayList.json();
+        this.playlistTokenList = playlistsResult.nextPageToken || undefined;
+        const apiUrl = `${this.api.baseUrl}videos?part=${this.api.part}&key=${
+          this.api.key
+        }&id=${playlistsResult.items
+          .map((item) => item.snippet.resourceId.videoId)
+          .join(',')}`;
+        let list = await fetch(apiUrl);
+        let response = await list.json();
+        let result = response.items.map((item) => {
+          return {
+            duration: this.convertTime(item.contentDetails.duration),
+            id: item.id,
+            channelTitle: item.snippet.channelTitle,
+            videoTitle: item.snippet.title,
+            thumbnails: item.snippet.thumbnails,
+            views: item.statistics.viewCount,
+            videoDescription: item.snippet.description,
+            type: 'video',
+          };
+        });
+        this.relatedVideos = [...this.relatedVideos, ...result];
+      }
+      // console.log('token');
+    },
     routeToChannel() {
       this.$router.push({
         name: 'Channel',
@@ -210,9 +250,15 @@ export default {
     },
     async intersected() {
       if (!this.$route.params.playlistId) await this.getRelatedVideos();
+      if (this.$route.params.playlistId) await this.getPlaylistVideos();
+    },
+    async getMoreData() {
+      if (!this.$route.params.playlistId) await this.getRelatedVideos();
+      if (this.$route.params.playlistId) await this.getPlaylistVideos();
     },
     async getRelatedVideos() {
       // console.log('scrolled enter');
+      this.loaderCompStatus = false;
       const { baseUrl, key, nextPageTokenSearch, maxResults } = this.api;
       const part = 'snippet';
       const type = 'video';
@@ -233,6 +279,7 @@ export default {
       } catch (err) {
         console.log(err);
       }
+      this.loaderCompStatus = true;
     },
     async listRelatedVideos(ids) {
       const { baseUrl, key, part } = this.api;
@@ -303,7 +350,7 @@ export default {
       let s = Math.floor((duration % 3600) % 60);
 
       let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
-      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '';
+      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '00:';
       let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
       return hDisplay + mDisplay + sDisplay;
     },
@@ -319,48 +366,8 @@ export default {
     Observer,
     Playlist,
     More,
-  },
-  filters: {
-    viewsFilter: function (value) {
-      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    },
-    likesFilter: function (value) {
-      if (Math.abs(value) > 999)
-        return Math.sign(value) * (Math.abs(value) / 1000).toFixed(1) + 'k';
-      if (Math.abs(value) > 999999)
-        return Math.sign(value) * (Math.abs(value) / 1000000).toFixed(1) + 'M';
-      if (Math.abs(value) > 999999999)
-        return (
-          Math.sign(value) * (Math.abs(value) / 1000000000).toFixed(1) + 'B'
-        );
-      return Math.sign(value) * Math.abs(value);
-    },
-    publishFilter: function (value) {
-      let d = new Date(value);
-      let currentYear = new Date().getFullYear();
-      let years = d.getFullYear();
-      let months = d.getMonth();
-      let hours = d.getHours();
-      let minutes = d.getMinutes();
-      if (years < currentYear && currentYear - years > 1)
-        return `${currentYear - years} years`;
-      if (years < currentYear) return `${currentYear - years} year`;
-      if (months === 1) {
-        return `${months} month`;
-      }
-      if (months > 1) {
-        return `${months} months`;
-      }
-      if (hours === 1) {
-        return `${hours} hour`;
-      }
-      if (hours > 1) {
-        return `${hours} hours`;
-      }
-      if (minutes > 0) {
-        return `${months} minutes`;
-      }
-    },
+    LoadMore,
+    Loader,
   },
 };
 </script>
@@ -374,9 +381,13 @@ $medium: 900px
   &__listVideos
     @media (min-width: $medium)
       padding: 1em 14em
+    &__title
+      font-size: 1.5rem
+      padding: .25em
   @media (min-width: $medium)
     padding: 0 15em
     padding-top: 2em
+
   &__video
       width: 100%
       iframe

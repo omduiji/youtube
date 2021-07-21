@@ -1,30 +1,38 @@
 <template>
-  <div class="searchPage">
-    <VideosList
-      v-for="(video, index) in searchResults"
-      :key="index"
-      :duration="video.videoDuration"
-      :smallScreenThumb="video.thumbnails.default.url"
-      :mediumScreenThumb="video.thumbnails.medium.url"
-      :largeScreenThumb="video.thumbnails.medium.url"
-      :title="video.videoTitle"
-      :channelTitle="video.videoChannelTitle"
-      :viewsCount="video.videoViews"
-      :videoId="video.id"
-      :videoDescription="video.description"
-      :publishDate="video.publishDate"
-      :type="video.type"
-      :listChannelTitle="video.listChannelTitle"
-      :channelSubscribers="video.videoCountChannel"
-      :channelVideos="video.subscriberCount"
-      :playListTitle="video.playListTitle"
-      :playlistVideoCount="video.playlistVideoCount"
-    ></VideosList>
+  <div>
+    <Filters
+      @typeSearch="searchByType"
+      @timeSearch="searchByTime"
+      @orderSearch="searchByOrder"
+      :searchingResults="resultsCount"
+    ></Filters>
+    <div class="searchPage">
+      <VideosList
+        v-for="(video, index) in searchResults"
+        :key="index"
+        :duration="video.videoDuration"
+        :smallScreenThumb="video.thumbnails.default.url"
+        :mediumScreenThumb="video.thumbnails.medium.url"
+        :largeScreenThumb="video.thumbnails.medium.url"
+        :title="video.videoTitle"
+        :channelTitle="video.videoChannelTitle"
+        :viewsCount="video.videoViews"
+        :videoId="video.id"
+        :videoDescription="video.description"
+        :publishDate="video.publishDate"
+        :type="video.type"
+        :listChannelTitle="video.listChannelTitle"
+        :channelSubscribers="video.videoCountChannel"
+        :channelVideos="video.subscriberCount"
+        :playListTitle="video.playListTitle"
+        :playlistVideoCount="video.playlistVideoCount"
+      ></VideosList>
 
-    <LoadMore @getMoreData="getMoreData" v-show="loaderCompStatus"></LoadMore>
-    <Loader v-show="!loaderCompStatus"></Loader>
-    <Observer @intersect="intersected" />
-    <Filters v-if="notAvailabale" :searchResultsCount="resultsCount"></Filters>
+      <LoadMore @getMoreData="getMoreData" v-show="loaderCompStatus"></LoadMore>
+      <Loader v-show="!loaderCompStatus"></Loader>
+      <Observer @intersect="intersected" />
+      <!-- <Filters v-if="notAvailabale" :searchResultsCount="resultsCount"></Filters> -->
+    </div>
   </div>
 </template>
 
@@ -34,7 +42,7 @@ import VideosList from '@/components/videosList.vue';
 import LoadMore from '@/components/loadMore.vue';
 import Loader from '@/components/loader.vue';
 import Observer from '@/components/observer.vue';
-import Filters from '@/components/filters.vue';
+import Filters from '@/components/searchFilters.vue';
 
 // import { EventBus } from "../eventBus";
 
@@ -42,6 +50,10 @@ export default {
   name: 'Main',
   data() {
     return {
+      typeValue: '',
+      orderValue: '',
+      searchQuery: '',
+      timeValue: {},
       resultsCount: '',
       searchingParams: '',
       observer: null,
@@ -53,7 +65,7 @@ export default {
         part: 'snippet',
         maxResults: 10,
         regionCode: 'US',
-        key: 'AIzaSyAlc0f_0RHg4B0eeu3e47v9AM0_LIriNI4',
+        key: 'AIzaSyBMZdoHJUl8U9as-6LZ7m9XynYvFBCcaXk',
         channelToken: '',
         videoToken: '',
         playlistToken: '',
@@ -77,17 +89,35 @@ export default {
   async created() {
     // console.log(this.$route.params.searchObject, 'apaarasm');
     await this.searching();
+    this.searchQuery = this.$route.params.query;
   },
 
   methods: {
+    startSearch() {
+      console.log('start search started');
+    },
+    searchByType(value) {
+      this.typeValue = value;
+      this.searching();
+    },
+
+    searchByOrder(value) {
+      this.orderValue = value;
+      this.searching();
+    },
+    searchByTime(value) {
+      this.timeValue = value;
+      this.searching();
+    },
+
     async getMoreData() {
       await this.searching();
     },
     async searching() {
       this.loaderCompStatus = false;
 
-      let types = this.$route.params.searchObject.type
-        ? this.$route.params.searchObject.type.split(',')
+      let types = this.typeValue
+        ? this.typeValue.split(',')
         : ['channel', 'video', 'playlist'];
 
       let dynamicTokens = {
@@ -98,29 +128,24 @@ export default {
 
       let urls = [];
       let urlParams = new URLSearchParams();
-
-      urlParams.append('q', this.$route.params.searchObject.query);
+      // console.log(this.$route.params.searchObject.query);
+      urlParams.append('q', this.$route.params.query);
       urlParams.append('regionCode', this.api.regionCode);
       urlParams.append('maxResults', this.api.maxResults);
       urlParams.append('part', this.api.part);
       urlParams.append('key', this.api.key);
 
-      if (this.$route.params.searchObject.order)
-        urlParams.append('order', this.$route.params.searchObject.order);
+      if (this.orderValue) urlParams.append('order', this.orderValue);
 
-      if (this.$route.params.searchObject.time) {
-        urlParams.append(
-          'publishedBefore',
-          this.$route.params.searchObject.time.end
-        );
-        urlParams.append(
-          'publishedAfter',
-          this.$route.params.searchObject.time.start
-        );
+      if (this.timeValue.start) {
+        urlParams.append('publishedBefore', this.timeValue.end);
+        urlParams.append('publishedAfter', this.timeValue.start);
       }
       types.forEach((type) => {
         urls.push(
-          `${this.api.baseUrl}search?&type=${type}&pageToken=&${dynamicTokens[type]}${urlParams}`
+          `${this.api.baseUrl}search?&type=${type}&pageToken=${
+            dynamicTokens[`${type}`]
+          }&${urlParams}`
         );
       });
 
@@ -147,7 +172,11 @@ export default {
           [arr[i], arr[j]] = [arr[j], arr[i]];
         }
         this.loaderCompStatus = false;
+
         this.searchResults = [...this.searchResults, ...arr];
+        if (this.typeValue || this.orderValue || this.timeValue.start) {
+          this.searchResults = [...arr];
+        }
       } catch (err) {
         console.log(err);
       }

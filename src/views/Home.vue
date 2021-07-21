@@ -47,7 +47,7 @@ export default {
         order: 'viewCount',
         maxResults: 20,
         regionCode: 'US',
-        key: 'AIzaSyAlc0f_0RHg4B0eeu3e47v9AM0_LIriNI4',
+        key: 'AIzaSyBMZdoHJUl8U9as-6LZ7m9XynYvFBCcaXk',
         prevPageToken: '',
         nextPageToken: '',
         videoEmbeddable: 'true',
@@ -136,7 +136,7 @@ export default {
       let s = Math.floor((duration % 3600) % 60);
 
       let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
-      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '';
+      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '00:';
       let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
       return hDisplay + mDisplay + sDisplay;
     },

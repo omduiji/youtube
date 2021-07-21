@@ -82,7 +82,7 @@ export default {
       api: {
         baseUrl: 'https://www.googleapis.com/youtube/v3/',
         part: 'snippet,contentDetails,statistics',
-        key: 'AIzaSyAlc0f_0RHg4B0eeu3e47v9AM0_LIriNI4',
+        key: 'AIzaSyBMZdoHJUl8U9as-6LZ7m9XynYvFBCcaXk',
         nextPageTokenSearch: '',
         maxResults: 25,
       },
@@ -227,13 +227,6 @@ export default {
       let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '';
       let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
       return hDisplay + mDisplay + sDisplay;
-    },
-  },
-  filters: {
-    viewsFilter: function (value) {
-      return typeof value !== String
-        ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : '';
     },
   },
 };

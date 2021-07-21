@@ -141,43 +141,14 @@ export default {
     'type',
     'playlistId',
   ],
-  filters: {
-    viewsFilter: function (value) {
-      return typeof value !== String
-        ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : '';
-    },
-    publishFilter: function (value) {
-      let d = new Date(value);
-      let currentYear = new Date().getFullYear();
-      let years = d.getFullYear();
-      let months = d.getMonth();
-      let hours = d.getHours();
-      let minutes = d.getMinutes();
-      if (years < currentYear && currentYear - years > 1)
-        return `${currentYear - years} years`;
-      if (years < currentYear) return `${currentYear - years} year`;
-      if (months === 1) {
-        return `${months} month`;
-      }
-      if (months > 1) {
-        return `${months} months`;
-      }
-      if (hours === 1) {
-        return `${hours} hour`;
-      }
-      if (hours > 1) {
-        return `${hours} hours`;
-      }
-      if (minutes > 0) {
-        return `${months} minutes`;
-      }
-    },
-  },
+
   methods: {
     routeToParent() {
+      console.log('routing start');
       if (this.type === 'video') {
+        console.log('video routing start');
         if (this.$route.name === 'Video') {
+          console.log('same video routing start');
           this.$route.params.id = this.videoId;
           setTimeout(() => {
             window.location.reload();
@@ -262,7 +233,7 @@ $medium: 900px
       background-color: #4c4c4c
       font-size: 12px
       padding: .25em
-      min-width: 40px
+      min-width: 10px
 
   &__details
     font-size: 1rem

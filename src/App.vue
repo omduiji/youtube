@@ -1,12 +1,7 @@
 <template>
   <div id="app">
     <!-- <MainPage></MainPage> -->
-    <Header
-      @getSearchParams="getParams"
-      @getSearchParamsFilteredByType="getTypeFilters"
-      @getSearchParamsFilteredByTime="getTimeFilters"
-      @getSearchParamsFilteredByOrder="getOrderFilters"
-    ></Header>
+    <Header @getSearchParams="getParams"></Header>
     <router-view />
   </div>
 </template>
@@ -31,22 +26,14 @@ export default {
   },
   methods: {
     getParams(params) {
-      let searchObject = {
-        query: params,
-      };
-      if (this.typeFilter) searchObject.type = this.typeFilter;
-      if (this.timeFilter) searchObject.time = this.timeFilter;
-      if (this.orderFilter) searchObject.order = this.orderFilter;
-      this.$router.push({ name: 'Search', params: { searchObject } });
-    },
-    getTypeFilters(value) {
-      this.typeFilter = value;
-    },
-    getTimeFilters(value) {
-      this.timeFilter = value;
-    },
-    getOrderFilters(value) {
-      this.orderFilter = value;
+      if (this.$route.name === 'Search') {
+        setTimeout(() => {
+          window.location.reload();
+        }, 0);
+      }
+      this.$router
+        .push({ name: 'Search', params: { query: params } })
+        .catch(() => {});
     },
   },
 };
