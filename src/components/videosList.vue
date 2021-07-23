@@ -123,45 +123,40 @@
 <script>
 export default {
   props: [
-    "duration",
-    "smallScreenThumb",
-    "mediumScreenThumb",
-    "largeScreenThumb",
-    "title",
-    "channelTitle",
-    "viewsCount",
-    "videoId",
-    "videoDescription",
-    "publishDate",
-    "listChannelTitle",
-    "channelSubscribers",
-    "channelVideos",
-    "playListTitle",
-    "playlistVideoCount",
-    "type",
-    "playlistId",
+    'duration',
+    'smallScreenThumb',
+    'mediumScreenThumb',
+    'largeScreenThumb',
+    'title',
+    'channelTitle',
+    'viewsCount',
+    'videoId',
+    'videoDescription',
+    'publishDate',
+    'listChannelTitle',
+    'channelSubscribers',
+    'channelVideos',
+    'playListTitle',
+    'playlistVideoCount',
+    'type',
+    'playlistId',
   ],
 
   methods: {
     routeToParent() {
-      console.log("routing start");
-      if (this.type === "video") {
-        console.log("video routing start");
-        if (this.$route.name === "Video") {
-          console.log("same video routing start");
-          this.$route.params.id = this.videoId;
-          setTimeout(() => {
-            window.location.reload();
-          }, 0);
+      if (this.type === 'video') {
+        if (this.$route.name === 'Video') {
+          this.$router.replace({ name: 'Video', params: { id: this.videoId } });
+          this.$router.go();
         }
-        this.$router.push({ name: "Video", params: { id: this.videoId } });
+        this.$router.push({ name: 'Video', params: { id: this.videoId } });
       }
-      if (this.type === "channel") {
-        this.$router.push({ name: "Channel", params: { id: this.videoId } });
+      if (this.type === 'channel') {
+        this.$router.push({ name: 'Channel', params: { id: this.videoId } });
       }
-      if (this.type === "playlist") {
+      if (this.type === 'playlist') {
         this.$router.push({
-          name: "Video",
+          name: 'Video',
           params: { playlistId: this.playlistId },
         });
       }
