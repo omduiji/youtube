@@ -38,41 +38,41 @@
 
 <script>
 // import Channel from '@/components/channel.vue';
-import VideosList from "@/components/videosList.vue";
-import LoadMore from "@/components/loadMore.vue";
-import Loader from "@/components/loader.vue";
-import Observer from "@/components/observer.vue";
-import Filters from "@/components/searchFilters.vue";
+import VideosList from '@/components/videosList.vue';
+import LoadMore from '@/components/loadMore.vue';
+import Loader from '@/components/loader.vue';
+import Observer from '@/components/observer.vue';
+import Filters from '@/components/searchFilters.vue';
 
 // import { EventBus } from "../eventBus";
 
 export default {
-  name: "Main",
+  name: 'Main',
   data() {
     return {
-      typeValue: "",
-      orderValue: "",
-      searchQuery: "",
+      typeValue: '',
+      orderValue: '',
+      searchQuery: '',
       timeValue: {},
-      resultsCount: "",
-      searchingParams: "",
+      resultsCount: '',
+      searchingParams: '',
       observer: null,
       loaderCompStatus: true,
       notAvailabale: false,
       searchResults: [],
       api: {
         baseUrl: process.env.VUE_APP_BASE_URL,
-        part: "snippet",
+        part: 'snippet',
         maxResults: 10,
-        regionCode: "US",
+        regionCode: 'US',
         key: process.env.VUE_APP_API_KEY,
-        channelToken: "",
-        videoToken: "",
-        playlistToken: "",
-        q: "",
-        searchPageToken: "",
-        listResultsToken: "",
-        order: "",
+        channelToken: '',
+        videoToken: '',
+        playlistToken: '',
+        q: '',
+        searchPageToken: '',
+        listResultsToken: '',
+        order: '',
       },
     };
   },
@@ -89,12 +89,19 @@ export default {
   async created() {
     // console.log(this.$route.params.searchObject, 'apaarasm');
     await this.searching();
+    this.$watch(
+      () => this.$route.params.query,
+      () => {
+        this.searchResults = [];
+        this.searching();
+      }
+    );
     this.searchQuery = this.$route.params.query;
   },
 
   methods: {
     startSearch() {
-      console.log("start search started");
+      console.log('start search started');
     },
     searchByType(value) {
       this.typeValue = value;
@@ -117,8 +124,8 @@ export default {
       this.loaderCompStatus = false;
 
       let types = this.typeValue
-        ? this.typeValue.split(",")
-        : ["channel", "video", "playlist"];
+        ? this.typeValue.split(',')
+        : ['channel', 'video', 'playlist'];
 
       let dynamicTokens = {
         channel: this.api.channelToken,
@@ -129,17 +136,17 @@ export default {
       let urls = [];
       let urlParams = new URLSearchParams();
       // console.log(this.$route.params.searchObject.query);
-      urlParams.append("q", this.$route.params.query);
-      urlParams.append("regionCode", this.api.regionCode);
-      urlParams.append("maxResults", this.api.maxResults);
-      urlParams.append("part", this.api.part);
-      urlParams.append("key", this.api.key);
+      urlParams.append('q', this.$route.params.query);
+      urlParams.append('regionCode', this.api.regionCode);
+      urlParams.append('maxResults', this.api.maxResults);
+      urlParams.append('part', this.api.part);
+      urlParams.append('key', this.api.key);
 
-      if (this.orderValue) urlParams.append("order", this.orderValue);
+      if (this.orderValue) urlParams.append('order', this.orderValue);
 
       if (this.timeValue.start) {
-        urlParams.append("publishedBefore", this.timeValue.end);
-        urlParams.append("publishedAfter", this.timeValue.start);
+        urlParams.append('publishedBefore', this.timeValue.end);
+        urlParams.append('publishedAfter', this.timeValue.start);
       }
       types.forEach((type) => {
         urls.push(
@@ -163,7 +170,7 @@ export default {
           0
         );
         // console.log(this.resultsCount);
-        window.localStorage.setItem("count", this.resultsCount);
+        // window.localStorage.setItem('count', this.resultsCount);
         let arr = await this.getSearchResults(resultArr, types);
         // console.log(arr);
 
@@ -174,6 +181,7 @@ export default {
         this.loaderCompStatus = false;
 
         this.searchResults = [...this.searchResults, ...arr];
+        // console.log(this.searchResults, 'resss');
         if (this.typeValue || this.orderValue || this.timeValue.start) {
           this.searchResults = [...arr];
         }
@@ -185,9 +193,9 @@ export default {
     async getSearchResults(list, types) {
       const { baseUrl, key } = this.api;
       const parts = {
-        channel: "snippet,contentDetails,statistics",
-        playlist: "snippet,contentDetails",
-        video: "snippet,contentDetails,statistics",
+        channel: 'snippet,contentDetails,statistics',
+        playlist: 'snippet,contentDetails',
+        video: 'snippet,contentDetails,statistics',
       };
 
       let channelIds = [];
@@ -202,25 +210,25 @@ export default {
         })
       );
       types.forEach((type) => {
-        if (type === "channel") {
+        if (type === 'channel') {
           urls.push(
             `${baseUrl}/${type}s?part=${
               parts[type]
-            }&key=${key}&id=${channelIds.join(",")}`
+            }&key=${key}&id=${channelIds.join(',')}`
           );
         }
-        if (type === "video") {
+        if (type === 'video') {
           urls.push(
             `${baseUrl}/${type}s?part=${
               parts[type]
-            }&key=${key}&id=${videoIds.join(",")}`
+            }&key=${key}&id=${videoIds.join(',')}`
           );
         }
-        if (type === "playlist") {
+        if (type === 'playlist') {
           urls.push(
             `${baseUrl}/${type}s?part=${
               parts[type]
-            }&key=${key}&id=${playlistIds.join(",")}`
+            }&key=${key}&id=${playlistIds.join(',')}`
           );
         }
       });
@@ -233,7 +241,7 @@ export default {
             acc.push({
               listChannelTitle: obj.snippet.title,
               thumbnails: obj.snippet.thumbnails,
-              type: obj.kind.split("#")[1],
+              type: obj.kind.split('#')[1],
               id: obj.id,
               videoCountChannel: obj.statistics?.videoCount,
               subscriberCount: obj.statistics?.subscriberCount,
@@ -254,7 +262,7 @@ export default {
       let finaSearchArray = finalMap.map((item) => {
         return {
           videoDuration:
-            item.duration !== undefined ? this.convertTime(item.duration) : "",
+            item.duration !== undefined ? this.convertTime(item.duration) : '',
           ...item,
         };
       });
@@ -268,25 +276,25 @@ export default {
 
     convertTime(duration) {
       if (duration === undefined) {
-        return "";
+        return '';
       }
       let a = duration.match(/\d+/g);
 
       if (
-        duration.indexOf("M") >= 0 &&
-        duration.indexOf("H") == -1 &&
-        duration.indexOf("S") == -1
+        duration.indexOf('M') >= 0 &&
+        duration.indexOf('H') == -1 &&
+        duration.indexOf('S') == -1
       ) {
         a = [0, a[0], 0];
       }
 
-      if (duration.indexOf("H") >= 0 && duration.indexOf("M") == -1) {
+      if (duration.indexOf('H') >= 0 && duration.indexOf('M') == -1) {
         a = [a[0], 0, a[1]];
       }
       if (
-        duration.indexOf("H") >= 0 &&
-        duration.indexOf("M") == -1 &&
-        duration.indexOf("S") == -1
+        duration.indexOf('H') >= 0 &&
+        duration.indexOf('M') == -1 &&
+        duration.indexOf('S') == -1
       ) {
         a = [a[0], 0, 0];
       }
@@ -312,9 +320,9 @@ export default {
       let h = Math.floor(duration / 3600);
       let m = Math.floor((duration % 3600) / 60);
       let s = Math.floor((duration % 3600) % 60);
-      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : "";
-      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : "";
-      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : "00";
+      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
+      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '';
+      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
       return hDisplay + mDisplay + sDisplay;
     },
   },

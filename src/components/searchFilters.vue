@@ -21,10 +21,9 @@
                 @click="sendDate(index)"
               >
                 {{ time.name }}
-                <Close
-                  v-if="time.iconStatus"
-                  @click="time.iconStatus = false"
-                ></Close>
+                <span v-if="time.iconStatus" @click.stop="removeTime(index)"
+                  ><Close></Close
+                ></span>
               </li>
             </ul>
           </div>
@@ -37,10 +36,10 @@
                 @click="sendType(index)"
               >
                 {{ type.name }}
-                <Close
-                  v-show="type.iconStatus"
-                  @click="type.iconStatus = false"
-                ></Close>
+
+                <span v-if="type.iconStatus" @click.stop="removeType(index)"
+                  ><Close></Close
+                ></span>
               </li>
             </ul>
           </div>
@@ -53,10 +52,9 @@
                 @click="sendOrder(index)"
               >
                 {{ order.name }}
-                <span v-if="order.iconStatus" @click="removeOrder(index)"
+                <span v-if="order.iconStatus" @click.stop="removeOrder(index)"
                   ><Close></Close
                 ></span>
-                <span v-else></span>
               </li>
             </ul>
           </div>
@@ -103,99 +101,92 @@
 </template>
 
 <script>
-import Close from "@/assets/close.svg";
-import FilterIcon from "@/assets/filter.svg";
+import Close from '@/assets/close.svg';
+import FilterIcon from '@/assets/filter.svg';
 export default {
-  created() {
-    // console.log(this.$route);
-    this.results = window.localStorage.getItem("count");
-    // if (this.$route.name == 'Video') window.localStorage.clear();
-    // if (this.$route.name == 'Home') window.localStorage.getItem('count');
-  },
-
   data() {
     return {
-      results: "",
+      results: '',
       hideWrapper: true,
-      searchByType: "",
-      searchByPeriod: "all",
-      searchByOrder: "relevance",
+      searchByType: '',
+      searchByPeriod: 'all',
+      searchByOrder: 'relevance',
       types: [
         {
-          name: "All",
-          value: "video,playlist,channel",
+          name: 'All',
+          value: 'video,playlist,channel',
           iconStatus: false,
-          parent: "searchByType",
+          parent: 'searchByType',
         },
         {
-          name: "Video",
-          value: "video",
+          name: 'Video',
+          value: 'video',
           iconStatus: false,
-          parent: "searchByType",
+          parent: 'searchByType',
         },
         {
-          name: "Channel",
-          value: "channel",
+          name: 'Channel',
+          value: 'channel',
           iconStatus: false,
-          parent: "searchByType",
+          parent: 'searchByType',
         },
         {
-          name: "Playlist",
-          value: "playlist",
+          name: 'Playlist',
+          value: 'playlist',
           iconStatus: false,
-          parent: "searchByType",
+          parent: 'searchByType',
         },
       ],
       orders: [
         {
-          name: "Relevence",
-          value: "relevance",
+          name: 'Relevence',
+          value: 'relevance',
           iconStatus: false,
-          parent: "searchByOrder",
+          parent: 'searchByOrder',
         },
         {
-          name: "Upload date",
-          value: "date",
+          name: 'Upload date',
+          value: 'date',
           iconStatus: false,
-          parent: "searchByOrder",
+          parent: 'searchByOrder',
         },
         {
-          name: "View count",
-          value: "viewCount",
+          name: 'View count',
+          value: 'viewCount',
           iconStatus: false,
-          parent: "searchByOrder",
+          parent: 'searchByOrder',
         },
         {
-          name: "Rating",
-          value: "rating",
+          name: 'Rating',
+          value: 'rating',
           iconStatus: false,
-          parent: "searchByOrder",
+          parent: 'searchByOrder',
         },
       ],
       times: [
         {
-          name: "All",
-          value: "all",
+          name: 'All',
+          value: 'all',
           iconStatus: false,
-          parent: "searchByPeriod",
+          parent: 'searchByPeriod',
         },
         {
-          name: "Today",
-          value: "today",
+          name: 'Today',
+          value: 'today',
           iconStatus: false,
-          parent: "searchByPeriod",
+          parent: 'searchByPeriod',
         },
         {
-          name: "This Week",
-          value: "weekAgo",
+          name: 'This Week',
+          value: 'weekAgo',
           iconStatus: false,
-          parent: "searchByPeriod",
+          parent: 'searchByPeriod',
         },
         {
-          name: "This Month",
-          value: "monthAgo",
+          name: 'This Month',
+          value: 'monthAgo',
           iconStatus: false,
-          parent: "searchByPeriod",
+          parent: 'searchByPeriod',
         },
       ],
     };
@@ -210,48 +201,60 @@ export default {
   methods: {
     removeOrder(order) {
       this.orders[order].iconStatus = false;
-      // let temp = this.orders[order];
-      // let tempIndex = order;
-      // this.orders.splice(order, 1);
-      // this.orders.push(temp);
-      // this.orders[tempIndex] = temp;
-      console.log(this.orders[order].iconStatus, "ooo");
+    },
+    removeType(type) {
+      this.types[type].iconStatus = false;
+    },
+    removeTime(time) {
+      this.times[time].iconStatus = false;
     },
     sendDate(element) {
-      this.times[element].iconStatus = true;
+      // this.times[element].iconStatus = true;
       this.searchByPeriod = this.times[element].value;
+      this.times.forEach((item) => {
+        item.iconStatus = false;
+        if (item.value === this.searchByPeriod) item.iconStatus = true;
+      });
       this.searchingByTime();
     },
     sendType(element) {
-      this.types[element].iconStatus = true;
+      // this.types[element].iconStatus = true;
       this.searchByType = this.types[element].value;
+      this.types.forEach((item) => {
+        item.iconStatus = false;
+        if (item.value === this.searchByType) item.iconStatus = true;
+      });
       this.searchingByType();
     },
     sendOrder(element) {
-      this.orders[element].iconStatus = true;
+      // this.orders[element].iconStatus = true;
       this.searchByOrder = this.orders[element].value;
+      this.orders.forEach((item) => {
+        item.iconStatus = false;
+        if (item.value === this.searchByOrder) item.iconStatus = true;
+      });
       this.searchingByOrder();
     },
     searchingByType() {
-      this.$emit("typeSearch", this.searchByType);
+      this.$emit('typeSearch', this.searchByType);
     },
     searchingByTime() {
-      this.$emit("timeSearch", this.getTimeFormat(this.searchByPeriod));
+      this.$emit('timeSearch', this.getTimeFormat(this.searchByPeriod));
     },
     searchingByOrder() {
-      this.$emit("orderSearch", this.searchByOrder);
+      this.$emit('orderSearch', this.searchByOrder);
     },
     getTimeFormat(value) {
       let publishingObject = {
-        start: "",
-        end: "",
+        start: '',
+        end: '',
       };
       let today = new Date();
-      if (value === "today") {
+      if (value === 'today') {
         publishingObject.start = today.toISOString();
         publishingObject.end = today.toISOString();
       }
-      if (value === "weekAgo") {
+      if (value === 'weekAgo') {
         publishingObject.end = today.toISOString();
         publishingObject.start = new Date(
           today.getFullYear(),
@@ -259,7 +262,7 @@ export default {
           today.getDate() - 7
         ).toISOString();
       }
-      if (value === "monthAgo") {
+      if (value === 'monthAgo') {
         publishingObject.end = new Date(
           today.getFullYear(),
           today.getMonth() + 1,

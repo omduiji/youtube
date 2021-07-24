@@ -28,7 +28,7 @@ export default {
     getParams(params) {
       if (this.$route.name === 'Search') {
         this.$router.replace({ params: { query: params } });
-        this.$router.go();
+        return;
       }
       this.$router.push({ name: 'Search', params: { query: params } });
     },

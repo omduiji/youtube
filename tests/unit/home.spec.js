@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import homePage from '@/views/Home.vue';
-// import VideosList from '@/components/videosList.vue';
+import VideosList from '@/components/videosList.vue';
 import LoadMore from '@/components/loadMore.vue';
 import Loader from '@/components/loader.vue';
 import Observer from '@/components/observer.vue';
@@ -11,7 +11,7 @@ jest.mock('@/components/observer.vue');
 describe('home page', () => {
   it('rendering components', async () => {
     const wrapper = await mount(homePage);
-    // let videoListComponent = wrapper.findComponent(VideosList);
+    let videoListComponent = wrapper.findComponent(VideosList);
     let loadMoreComponent = wrapper.findComponent(LoadMore);
     let loaderComponent = wrapper.findComponent(Loader);
     let observerComponent = wrapper.findComponent(Observer);

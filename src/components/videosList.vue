@@ -145,20 +145,23 @@ export default {
   methods: {
     routeToParent() {
       if (this.type === 'video') {
-        if (this.$route.name === 'Video') {
-          this.$router.replace({ name: 'Video', params: { id: this.videoId } });
-          this.$router.go();
-        }
+        // if (this.$route.name === 'Video') {
+        //   this.$router.replace({ name: 'Video', params: { id: this.videoId } });
+        //   ;
+        // }
         this.$router.push({ name: 'Video', params: { id: this.videoId } });
+        return;
       }
       if (this.type === 'channel') {
         this.$router.push({ name: 'Channel', params: { id: this.videoId } });
+        return;
       }
       if (this.type === 'playlist') {
         this.$router.push({
           name: 'Video',
           params: { playlistId: this.playlistId },
         });
+        return;
       }
     },
   },
