@@ -1,0 +1,33 @@
+<template>
+    <div class="errorPage">
+        <ErrorIcon></ErrorIcon>
+        <h1>400</h1>
+        <p>This page doesn't exsist</p>
+        <router-link to="/">Home</router-link>
+    </div>
+</template>
+<script>
+import ErrorIcon from '@/assets/error.svg';
+
+export default {
+    name: 'notFound',
+    components: {
+        ErrorIcon
+    }
+}
+</script>
+<style lang="sass">
+.errorPage
+    padding: 3em .5em
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    color: red
+    height: calc( 100vh -  52px)
+    svg
+        font-size: 3rem
+        height: 3rem
+        width: 3rem
+        
+</style>

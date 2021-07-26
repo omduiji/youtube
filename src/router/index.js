@@ -4,7 +4,7 @@ import Home from '../views/Home.vue';
 import Video from '../views/video.vue';
 import Channel from '../views/channel.vue';
 import Search from '../views/search.vue';
-import Test from '../views/test.vue';
+import notFound from '../views/notFound.vue';
 
 Vue.use(VueRouter);
 
@@ -30,9 +30,10 @@ const routes = [
     component: Search,
   },
   {
-    path: '/test',
-    name: 'Test',
-    component: Test,
+    path: '/notFound',
+    name: 'notFound',
+    alias: '*',
+    component: notFound,
   },
 ];
 
