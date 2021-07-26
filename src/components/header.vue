@@ -2,7 +2,7 @@
   <div>
     <nav class="nav">
       <header class="nav__header">
-        <router-link to="/"
+        <router-link :to="{name: 'Home'}"
           ><Youtube class="nav__header__logo"></Youtube
         ></router-link>
         <form class="nav__form">
@@ -92,6 +92,7 @@ $medium: 900px;
           svg
             fill: rgb(0,0,0)
     &__input
+      
       flex-grow: 1
       border: none
       background-color: $mainRed
@@ -116,6 +117,7 @@ $medium: 900px;
         padding: .35em
         margin: 0
         margin-left: 3em
+        
 
     &__icon
       width: clamp(1rem, 1.2rem, 3rem)

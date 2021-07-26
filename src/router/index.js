@@ -1,10 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
-import Video from '../views/video.vue';
-import Channel from '../views/channel.vue';
-import Search from '../views/search.vue';
-import notFound from '../views/notFound.vue';
 
 Vue.use(VueRouter);
 
@@ -12,28 +7,28 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue')
   },
   {
     path: '/video/:id/:playlist?',
     name: 'Video',
-    component: Video,
+    component: () => import(/* webpackChunkName: "video" */ '../views/video.vue')
   },
   {
     path: '/channel/:id',
     name: 'Channel',
-    component: Channel,
+    component: () => import(/* webpackChunkName: "channel" */ '../views/channel.vue')
   },
   {
     path: '/search/:query',
     name: 'Search',
-    component: Search,
+    component: () => import(/* webpackChunkName: "search" */ '../views/search.vue')
   },
   {
-    path: '/notFound',
+    path: '/error/:status?/:msg?',
     name: 'notFound',
     alias: '*',
-    component: notFound,
+    component: () => import(/* webpackChunkName: "notFound" */ '../views/notFound.vue')
   },
 ];
 
@@ -42,5 +37,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
 
 export default router;

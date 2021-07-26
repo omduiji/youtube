@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <MainPage></MainPage> -->
-    <appHeader @getSearchParams="getParams"></appHeader>
+    <appHeader @getSearchParams="getParams" v-if="this.$route.name !== 'notFound'"></appHeader>
     <router-view />
   </div>
 </template>

@@ -1,8 +1,8 @@
 <template>
     <div class="errorPage">
         <ErrorIcon></ErrorIcon>
-        <h1>400</h1>
-        <p>This page doesn't exsist</p>
+        <h1>{{this.$route.params.status}}</h1>
+        <p>{{this.$route.params.msg}}</p>
         <router-link to="/">Home</router-link>
     </div>
 </template>

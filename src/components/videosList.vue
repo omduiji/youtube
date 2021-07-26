@@ -21,7 +21,7 @@
           />
           <img
             :src="smallScreenThumb"
-            class="video__img--video"
+            class="videos__img--video"
             alt=""
             decoding="async"
             loading="lazy"
@@ -46,7 +46,7 @@
 
           <img
             :src="smallScreenThumb"
-            class="video__img--channel"
+            class="videos__img--channel"
             alt=""
             decoding="async"
             loading="lazy"
@@ -75,7 +75,7 @@
 
           <img
             :src="smallScreenThumb"
-            class="video__img--playlist"
+            class="videos__img--playlist"
             alt=""
             decoding="async"
             loading="lazy"
@@ -170,7 +170,7 @@ export default {
 
 <style lang="sass">
 $medium: 900px
-
+$youtubeBlack: rgb(3,3,3)
 .videos
   display: flex
   align-items: stretch
@@ -228,11 +228,15 @@ $medium: 900px
       bottom: 5px
       right: 5px
       color: white
-      background-color: #4c4c4c
+      background-color: rgba(0,0,0,0.8) 
       font-size: 12px
       padding: .25em
       min-width: 10px
-
+      border-radius: 2px
+    &--video
+      width: 160px
+      @media (min-width: $medium)
+        width: 360px
   &__details
     font-size: 1rem
     margin-left: .75em
@@ -241,17 +245,23 @@ $medium: 900px
     align-items: flex-start
     justify-content: stretch
     &__name
-      width: 27ch
+      max-width: 20ch
       color: #4c4c4c
-      font-size: .8em
+      font-size: .8rem
+      line-height: 17.5px
       font-weight: 400
       white-space: pre-wrap;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-bottom: .25em
+      color: $youtubeBlack
+      max-height: 52px
+      // padding-right: 1em
       @media (min-width: $medium)
         font-size: 1.5em
-        width: clamp(30vw, 50vw, 60vw)
+        max-width: 50ch
+        line-height: 27px
+        // width: clamp(30vw, 50vw, 60vw)
     &__nameChannel
       margin-top: .5em
     &__namePlaylist
@@ -267,6 +277,9 @@ $medium: 900px
       font-size: .75em
       font-weight: 300
       margin-bottom: .25em
+      color: $youtubeBlack
+      opacity: .6
+      line-height: 15px
       @media (min-width: $medium)
         margin-bottom: 1.5em
         font-size: 1em
@@ -281,6 +294,9 @@ $medium: 900px
     &__views
       font-size: .75em
       font-weight: 300
+      color: $youtubeBlack
+      opacity: .6
+      line-height: 15px
       @media (min-width: $medium)
         display: none
 </style>
