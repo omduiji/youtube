@@ -1,14 +1,14 @@
 <template>
   <div id="app">
     <!-- <MainPage></MainPage> -->
-    <Header @getSearchParams="getParams"></Header>
+    <appHeader @getSearchParams="getParams"></appHeader>
     <router-view />
   </div>
 </template>
 <script>
 // @ is an alias to /src
 // import MainPage from '@/components/mainPage.vue';
-import Header from './components/header.vue';
+import appHeader from './components/header.vue';
 // import { EventBus } from './eventBus';
 
 export default {
@@ -22,7 +22,7 @@ export default {
   name: 'Home',
   components: {
     // MainPage,
-    Header,
+    appHeader,
   },
   methods: {
     getParams(params) {

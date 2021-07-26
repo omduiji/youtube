@@ -27,7 +27,7 @@ import SearchIcon from '@/assets/search.svg';
 
 export default {
   components: { Youtube, SearchIcon },
-  name: 'header',
+  name: 'appHeader',
   data() {
     return {
       search: '',

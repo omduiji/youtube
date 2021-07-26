@@ -4,6 +4,7 @@ import Home from '../views/Home.vue';
 import Video from '../views/video.vue';
 import Channel from '../views/channel.vue';
 import Search from '../views/search.vue';
+import Test from '../views/test.vue';
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/search/:query',
     name: 'Search',
     component: Search,
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test,
   },
 ];
 

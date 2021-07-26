@@ -220,6 +220,7 @@ export default {
             type: 'video',
           };
         });
+        this.relatedVideos.splice(0, 1);
         // console.log(this.relatedVideos, 'playlist videos');
       } catch (err) {
         console.log(err);
