@@ -10,10 +10,10 @@
 export default {
   methods: {
     loadMoareData() {
-      this.$emit('getMoreData');
+      this.$emit("getMoreData");
     },
   },
-  name: 'loadMore',
+  name: "loadMore",
 };
 </script>
 

@@ -1,31 +1,31 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import store from './store';
-import './registerServiceWorker';
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import "./registerServiceWorker";
 
 Vue.config.productionTip = false;
 new Vue({
   router,
   store,
   render: (h) => h(App),
-}).$mount('#app');
+}).$mount("#app");
 
-Vue.filter('likesFilter', function (value) {
+Vue.filter("likesFilter", function (value) {
   if (Math.abs(value) > 999)
-    return Math.sign(value) * (Math.abs(value) / 1000).toFixed(1) + 'k';
+    return Math.sign(value) * (Math.abs(value) / 1000).toFixed(1) + "k";
   if (Math.abs(value) > 999999)
-    return Math.sign(value) * (Math.abs(value) / 1000000).toFixed(1) + 'M';
+    return Math.sign(value) * (Math.abs(value) / 1000000).toFixed(1) + "M";
   if (Math.abs(value) > 999999999)
-    return Math.sign(value) * (Math.abs(value) / 1000000000).toFixed(1) + 'B';
+    return Math.sign(value) * (Math.abs(value) / 1000000000).toFixed(1) + "B";
   return Math.sign(value) * Math.abs(value);
 });
-Vue.filter('viewsFilter', function (value) {
+Vue.filter("viewsFilter", function (value) {
   return typeof value !== String
-    ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    : '';
+    ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    : "";
 });
-Vue.filter('publishFilter', function (value) {
+Vue.filter("publishFilter", function (value) {
   let d = new Date(value);
   let currentYear = new Date().getFullYear();
   let years = d.getFullYear();

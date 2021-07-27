@@ -1,11 +1,11 @@
-import { shallowMount } from '@vue/test-utils';
-import app from '@/App.vue';
-import Header from '@/components/header.vue';
+import { shallowMount } from "@vue/test-utils";
+import app from "@/App.vue";
+import Header from "@/components/header.vue";
 
-describe('render header', () => {
-  it('renders header component', () => {
+describe("render header", () => {
+  it("renders header component", () => {
     const wrapper = shallowMount(app, {
-      mocks: { $route: { name: 'Home' } },
+      mocks: { $route: { name: "Home" } },
     });
 
     let headerComponent = wrapper.findComponent(Header);

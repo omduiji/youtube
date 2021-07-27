@@ -11,15 +11,15 @@
 <script>
 // @ is an alias to /src
 // import MainPage from '@/components/mainPage.vue';
-import appHeader from './components/header.vue';
+import appHeader from "./components/header.vue";
 // import { EventBus } from './eventBus';
 
 export default {
   data() {
     return {
-      typeFilter: '',
-      timeFilter: '',
-      orderFilter: '',
+      typeFilter: "",
+      timeFilter: "",
+      orderFilter: "",
     };
   },
   // name: 'Home',
@@ -29,11 +29,11 @@ export default {
   },
   methods: {
     getParams(params) {
-      if (this.$route.name === 'Search') {
+      if (this.$route.name === "Search") {
         this.$router.replace({ params: { query: params } });
         return;
       }
-      this.$router.push({ name: 'Search', params: { query: params } });
+      this.$router.push({ name: "Search", params: { query: params } });
     },
   },
 };

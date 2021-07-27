@@ -28,8 +28,8 @@
               {{ channelData.statistics.subscriberCount | viewsFilter }}
               <span>{{
                 channelData.statistics.subscriberCount > 1
-                  ? 'Subscriber'
-                  : 'Subscribers'
+                  ? "Subscriber"
+                  : "Subscribers"
               }}</span>
             </p>
           </div>
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import VideosList from '@/components/videosList.vue';
+import VideosList from "@/components/videosList.vue";
 
 export default {
   components: { VideosList },
@@ -81,28 +81,28 @@ export default {
       loaderCompStatus: false,
       api: {
         baseUrl: process.env.VUE_APP_BASE_URL,
-        part: 'snippet,contentDetails,statistics',
+        part: "snippet,contentDetails,statistics",
         key: process.env.VUE_APP_API_KEY,
-        nextPageTokenSearch: '',
+        nextPageTokenSearch: "",
         maxResults: 25,
       },
       channelData: {
         statistics: {
-          subscriberCount: '',
+          subscriberCount: "",
         },
         snippet: {
           thumbnails: {
             medium: {
-              url: '',
+              url: "",
             },
             default: {
-              url: '',
+              url: "",
             },
           },
         },
       },
-      playlistToken: '',
-      searchToken: '',
+      playlistToken: "",
+      searchToken: "",
       Playlists: [],
       Videos: [],
     };
@@ -110,23 +110,23 @@ export default {
   async created() {
     this.loaderCompStatus = true;
     const urlParams = new URLSearchParams();
-    urlParams.append('maxResults', this.api.maxResults);
-    urlParams.append('key', this.api.key);
-    urlParams.append('channelId', this.$route.params.id);
+    urlParams.append("maxResults", this.api.maxResults);
+    urlParams.append("key", this.api.key);
+    urlParams.append("channelId", this.$route.params.id);
 
     const requests = [
       {
-        name: 'channelSections',
-        part: 'snippet,contentDetails',
+        name: "channelSections",
+        part: "snippet,contentDetails",
       },
       {
-        name: 'search',
-        part: 'snippet',
-        type: 'video',
+        name: "search",
+        part: "snippet",
+        type: "video",
       },
       {
-        name: 'playlists',
-        part: 'snippet,contentDetails,player',
+        name: "playlists",
+        part: "snippet,contentDetails,player",
       },
     ];
     let urls = [];
@@ -144,17 +144,19 @@ export default {
       res.map((r) => r.json())
     );
     this.channelData = channelData.items[0];
-   
+    console.log(sections);
+    // console.log(channelData.items[0], 'chdata');
+    // console.log(playlists);
     this.Playlists = playlists.items.map((item) => {
       return {
         itemCount: item.contentDetails.itemCount,
         title: item.snippet.title,
         thumbnails: item.snippet.thumbnails,
         id: item.id,
-        type: 'playlist',
+        type: "playlist",
       };
     });
-    let videosIds = searching.items.map((item) => item.id.videoId).join(',');
+    let videosIds = searching.items.map((item) => item.id.videoId).join(",");
     const videosUrl = `${this.api.baseUrl}/videos?part=${this.api.part}&key=${this.api.key}&id=${videosIds}`;
     let videosReq = await fetch(videosUrl);
     let videosRes = await videosReq.json();
@@ -166,10 +168,11 @@ export default {
         videoTitle: item.snippet.title,
         thumpnails: item.snippet.thumbnails,
         views: item.statistics.viewCount,
-        type: 'video',
+        type: "video",
         description: item.snippet.description,
       };
     });
+    // console.log(this.Playlists, "playlists");
     this.playlistToken = playlists.nextPageToken;
     this.searchToken = searching.nextPageToken;
     this.loaderCompStatus = false;
@@ -180,20 +183,20 @@ export default {
       let a = duration.match(/\d+/g);
 
       if (
-        duration.indexOf('M') >= 0 &&
-        duration.indexOf('H') == -1 &&
-        duration.indexOf('S') == -1
+        duration.indexOf("M") >= 0 &&
+        duration.indexOf("H") == -1 &&
+        duration.indexOf("S") == -1
       ) {
         a = [0, a[0], 0];
       }
 
-      if (duration.indexOf('H') >= 0 && duration.indexOf('M') == -1) {
+      if (duration.indexOf("H") >= 0 && duration.indexOf("M") == -1) {
         a = [a[0], 0, a[1]];
       }
       if (
-        duration.indexOf('H') >= 0 &&
-        duration.indexOf('M') == -1 &&
-        duration.indexOf('S') == -1
+        duration.indexOf("H") >= 0 &&
+        duration.indexOf("M") == -1 &&
+        duration.indexOf("S") == -1
       ) {
         a = [a[0], 0, 0];
       }
@@ -220,13 +223,13 @@ export default {
       let m = Math.floor((duration % 3600) / 60);
       let s = Math.floor((duration % 3600) % 60);
 
-      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
-      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '';
-      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
+      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : "";
+      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : "";
+      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : "00";
       return hDisplay + mDisplay + sDisplay;
     },
   },
-  name: 'channelPage',
+  name: "channelPage",
 };
 </script>
 

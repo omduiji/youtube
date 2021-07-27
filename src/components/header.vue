@@ -22,20 +22,20 @@
 </template>
 
 <script>
-import Youtube from '@/assets/logo.svg';
-import SearchIcon from '@/assets/search.svg';
+import Youtube from "@/assets/logo.svg";
+import SearchIcon from "@/assets/search.svg";
 
 export default {
-  name: 'appHeader',
+  name: "appHeader",
   components: { Youtube, SearchIcon },
   data() {
     return {
-      search: '',
+      search: "",
     };
   },
   methods: {
     getSearchQuery() {
-      this.$emit('getSearchParams', this.search);
+      this.$emit("getSearchParams", this.search);
     },
   },
 };

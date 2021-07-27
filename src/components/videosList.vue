@@ -123,42 +123,42 @@
 <script>
 export default {
   props: [
-    'duration',
-    'smallScreenThumb',
-    'mediumScreenThumb',
-    'largeScreenThumb',
-    'title',
-    'channelTitle',
-    'viewsCount',
-    'videoId',
-    'videoDescription',
-    'publishDate',
-    'listChannelTitle',
-    'channelSubscribers',
-    'channelVideos',
-    'playListTitle',
-    'playlistVideoCount',
-    'type',
-    'playlistId',
+    "duration",
+    "smallScreenThumb",
+    "mediumScreenThumb",
+    "largeScreenThumb",
+    "title",
+    "channelTitle",
+    "viewsCount",
+    "videoId",
+    "videoDescription",
+    "publishDate",
+    "listChannelTitle",
+    "channelSubscribers",
+    "channelVideos",
+    "playListTitle",
+    "playlistVideoCount",
+    "type",
+    "playlistId",
   ],
-  name: 'videoElement',
+  name: "videoElement",
   methods: {
     routeToParent() {
-      if (this.type === 'video') {
+      if (this.type === "video") {
         // if (this.$route.name === 'Video') {
         //   this.$router.replace({ name: 'Video', params: { id: this.videoId } });
         //   ;
         // }
-        this.$router.push({ name: 'Video', params: { id: this.videoId } });
+        this.$router.push({ name: "Video", params: { id: this.videoId } });
         return;
       }
-      if (this.type === 'channel') {
-        this.$router.push({ name: 'Channel', params: { id: this.videoId } });
+      if (this.type === "channel") {
+        this.$router.push({ name: "Channel", params: { id: this.videoId } });
         return;
       }
-      if (this.type === 'playlist') {
+      if (this.type === "playlist") {
         this.$router.push({
-          name: 'Video',
+          name: "Video",
           params: { playlistId: this.playlistId },
         });
         return;
@@ -228,7 +228,7 @@ $youtubeBlack: rgb(3,3,3)
       bottom: 5px
       right: 5px
       color: white
-      background-color: rgba(0,0,0,0.8) 
+      background-color: rgba(0,0,0,0.8)
       font-size: 12px
       padding: .25em
       min-width: 10px

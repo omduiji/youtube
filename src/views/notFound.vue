@@ -9,10 +9,10 @@
   </div>
 </template>
 <script>
-import ErrorIcon from '@/assets/error.svg';
+import ErrorIcon from "@/assets/error.svg";
 
 export default {
-  name: 'notFound',
+  name: "notFound",
   components: {
     ErrorIcon,
   },

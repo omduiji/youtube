@@ -82,7 +82,7 @@
           @click="videoShortDescription = !videoShortDescription"
           v-if="videoDescription"
         >
-          Show {{ videoShortDescription ? 'More' : 'Less' }}
+          Show {{ videoShortDescription ? "More" : "Less" }}
         </button>
         <ul>
           <li v-for="tag in videoDetails.snippet.tags" :key="tag">
@@ -117,18 +117,18 @@
 </template>
 
 <script>
-import VideosList from '@/components/videosList.vue';
-import FlagIcon from '@/assets/flag.svg';
-import PlusIcon from '@/assets/plus.svg';
-import ShareIcon from '@/assets/share.svg';
-import Playlist from '@/assets/playlist.svg';
-import ThumpsUpIcon from '@/assets/thumps-up.svg';
-import ThumpsDownIcon from '@/assets/thumps-down.svg';
-import Arrow from '@/assets/arrow-down.svg';
-import More from '@/assets/more.svg';
-import Observer from '@/components/observer.vue';
-import LoadMore from '@/components/loadMore.vue';
-import Loader from '@/components/loader.vue';
+import VideosList from "@/components/videosList.vue";
+import FlagIcon from "@/assets/flag.svg";
+import PlusIcon from "@/assets/plus.svg";
+import ShareIcon from "@/assets/share.svg";
+import Playlist from "@/assets/playlist.svg";
+import ThumpsUpIcon from "@/assets/thumps-up.svg";
+import ThumpsDownIcon from "@/assets/thumps-down.svg";
+import Arrow from "@/assets/arrow-down.svg";
+import More from "@/assets/more.svg";
+import Observer from "@/components/observer.vue";
+import LoadMore from "@/components/loadMore.vue";
+import Loader from "@/components/loader.vue";
 
 export default {
   data() {
@@ -138,23 +138,23 @@ export default {
       relatedVideos: [],
       videoDetails: {
         player: {
-          embedHtml: '',
+          embedHtml: "",
         },
         snippet: {
-          title: '',
+          title: "",
         },
         statistics: {
-          viewCount: '',
+          viewCount: "",
         },
       },
       showFooter: false,
-      videoDescription: '',
+      videoDescription: "",
       videoShortDescription: true,
       api: {
         baseUrl: process.env.VUE_APP_BASE_URL,
-        part: 'snippet,contentDetails,statistics,player',
+        part: "snippet,contentDetails,statistics,player",
         key: process.env.VUE_APP_API_KEY,
-        nextPageTokenSearch: '',
+        nextPageTokenSearch: "",
         maxResults: 25,
       },
     };
@@ -167,7 +167,7 @@ export default {
         this.getVideoResults();
         window.scrollTo({
           top: 0,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
       }
     );
@@ -194,7 +194,7 @@ export default {
         this.$route.params.playlistId
           ? playlistsResult.items
               .map((item) => item.snippet.resourceId.videoId)
-              .join(',')
+              .join(",")
           : this.$route.params.id
       }`;
       try {
@@ -217,14 +217,14 @@ export default {
             thumbnails: item.snippet.thumbnails,
             views: item.statistics.viewCount,
             videoDescription: item.snippet.description,
-            type: 'video',
+            type: "video",
           };
         });
         this.relatedVideos.splice(0, 1);
         // console.log(this.relatedVideos, 'playlist videos');
       } catch (err) {
         console.log(err);
-        this.$router.push({ name: 'notFound' });
+        this.$router.push({ name: "notFound" });
       }
     },
     async getPlaylistVideos() {
@@ -237,7 +237,7 @@ export default {
           this.api.key
         }&id=${playlistsResult.items
           .map((item) => item.snippet.resourceId.videoId)
-          .join(',')}`;
+          .join(",")}`;
         let list = await fetch(apiUrl);
         let response = await list.json();
         let result = response.items.map((item) => {
@@ -249,7 +249,7 @@ export default {
             thumbnails: item.snippet.thumbnails,
             views: item.statistics.viewCount,
             videoDescription: item.snippet.description,
-            type: 'video',
+            type: "video",
           };
         });
         this.relatedVideos = [...this.relatedVideos, ...result];
@@ -258,7 +258,7 @@ export default {
     },
     routeToChannel() {
       this.$router.push({
-        name: 'Channel',
+        name: "Channel",
         params: { id: this.videoDetails.snippet.channelId },
       });
     },
@@ -274,25 +274,25 @@ export default {
       // console.log('scrolled enter');
       this.loaderCompStatus = false;
       const { baseUrl, key, nextPageTokenSearch, maxResults } = this.api;
-      const part = 'snippet';
-      const type = 'video';
+      const part = "snippet";
+      const type = "video";
       const apiUrl = `${baseUrl}/search?part=${part}&key=${key}&relatedToVideoId=${this.$route.params.id}&type=${type}&pageToken=${nextPageTokenSearch}&maxResults=${maxResults}`;
       try {
         let list = await fetch(apiUrl);
         let response = await list.json();
         let relatedVideosIds = response.items
           .map((item) => item.id.videoId)
-          .join(',');
+          .join(",");
         this.relatedVideos = [
           ...this.relatedVideos,
           ...(await this.listRelatedVideos(relatedVideosIds)),
         ];
         this.api.nextPageTokenSearch = response.nextPageToken;
 
-        console.log(this.relatedVideos, 'scrolled');
+        console.log(this.relatedVideos, "scrolled");
       } catch (err) {
         console.log(err);
-        this.$router.push({ name: 'notFound' });
+        this.$router.push({ name: "notFound" });
       }
       this.loaderCompStatus = true;
     },
@@ -312,12 +312,12 @@ export default {
             thumbnails: item.snippet.thumbnails,
             views: item.statistics.viewCount,
             videoDescription: item.snippet.description,
-            type: 'video',
+            type: "video",
           };
         });
       } catch (err) {
         console.log(err);
-        this.$router.push({ name: 'notFound' });
+        this.$router.push({ name: "notFound" });
       }
       return relatedVideos;
     },
@@ -325,20 +325,20 @@ export default {
       let a = duration.match(/\d+/g);
 
       if (
-        duration.indexOf('M') >= 0 &&
-        duration.indexOf('H') == -1 &&
-        duration.indexOf('S') == -1
+        duration.indexOf("M") >= 0 &&
+        duration.indexOf("H") == -1 &&
+        duration.indexOf("S") == -1
       ) {
         a = [0, a[0], 0];
       }
 
-      if (duration.indexOf('H') >= 0 && duration.indexOf('M') == -1) {
+      if (duration.indexOf("H") >= 0 && duration.indexOf("M") == -1) {
         a = [a[0], 0, a[1]];
       }
       if (
-        duration.indexOf('H') >= 0 &&
-        duration.indexOf('M') == -1 &&
-        duration.indexOf('S') == -1
+        duration.indexOf("H") >= 0 &&
+        duration.indexOf("M") == -1 &&
+        duration.indexOf("S") == -1
       ) {
         a = [a[0], 0, 0];
       }
@@ -365,9 +365,9 @@ export default {
       let m = Math.floor((duration % 3600) / 60);
       let s = Math.floor((duration % 3600) % 60);
 
-      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
-      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '00:';
-      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
+      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : "";
+      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : "00:";
+      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : "00";
       return hDisplay + mDisplay + sDisplay;
     },
   },
