@@ -197,10 +197,7 @@ $youtubeBlack: rgb(3,3,3)
       align-items: center
       justify-content: center
       opacity: .93
-    &::before
-      content: 'TTT'
-      position: absolute
-      top: 50%
+    
     @media (min-width: $medium)
       &::after
         content: attr(data-playlistVideoCount)
@@ -216,10 +213,7 @@ $youtubeBlack: rgb(3,3,3)
         align-items: center
         justify-content: center
         opacity: .93
-      &::before
-        content: 'TTT'
-        position: absolute
-        top: 50%
+      
   &__img
     position: relative
     &::after
