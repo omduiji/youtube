@@ -23,18 +23,18 @@
 
 <script>
 // import Channel from '@/components/channel.vue';
-import VideosList from "@/components/videosList.vue";
-import LoadMore from "@/components/loadMore.vue";
-import Loader from "@/components/loader.vue";
-import Observer from "@/components/observer.vue";
+import VideosList from '@/components/videosList.vue';
+import LoadMore from '@/components/loadMore.vue';
+import Loader from '@/components/loader.vue';
+import Observer from '@/components/observer.vue';
 
 // import { EventBus } from "../eventBus";
 
 export default {
-  name: "Main",
+  name: 'Main',
   data() {
     return {
-      searchingParams: "",
+      searchingParams: '',
       observer: null,
       loaderStatus: false,
       loaderCompStatus: true,
@@ -42,15 +42,15 @@ export default {
       videosList: [],
       api: {
         baseUrl: `${process.env.VUE_APP_BASE_URL}/videos?`,
-        part: "snippet,contentDetails,statistics",
-        chart: "mostPopular",
-        order: "viewCount",
+        part: 'snippet,contentDetails,statistics',
+        chart: 'mostPopular',
+        order: 'viewCount',
         maxResults: 20,
-        regionCode: "US",
+        regionCode: 'US',
         key: process.env.VUE_APP_API_KEY,
-        prevPageToken: "",
-        nextPageToken: "",
-        videoEmbeddable: "true",
+        prevPageToken: '',
+        nextPageToken: '',
+        videoEmbeddable: 'true',
       },
     };
   },
@@ -69,7 +69,7 @@ export default {
 
   methods: {
     hydrateResponse(response) {
-      if(response === undefined) return
+      if (response === undefined) return;
       this.api.nextPageToken = response.nextPageToken;
       this.videosList = response.items.map((item) => {
         return {
@@ -79,7 +79,7 @@ export default {
           videoTitle: item.snippet.title,
           thumpnails: item.snippet.thumbnails,
           views: item.statistics.viewCount,
-          type: "video",
+          type: 'video',
           description: item.snippet.description,
         };
       });
@@ -90,16 +90,18 @@ export default {
       try {
         let list = await fetch(apiUrl);
         if (list.ok === false) {
-          this.$router.push({ name: "notFound", params: {status: list.status} });
+          this.$router.push({
+            name: 'notFound',
+            params: { status: list.status },
+          });
           return;
         }
         let response = await list.json();
-        console.log(response.status, "ssss");
+        console.log(response, 'ssss');
         return response;
-      
       } catch (err) {
-        console.log(err, "ooooo");
-        this.$router.push({ name: "notFound"})
+        console.log(err, 'ooooo');
+        this.$router.push({ name: 'notFound' });
       }
     },
     async intersected() {
@@ -110,20 +112,20 @@ export default {
       let a = duration.match(/\d+/g);
 
       if (
-        duration.indexOf("M") >= 0 &&
-        duration.indexOf("H") == -1 &&
-        duration.indexOf("S") == -1
+        duration.indexOf('M') >= 0 &&
+        duration.indexOf('H') == -1 &&
+        duration.indexOf('S') == -1
       ) {
         a = [0, a[0], 0];
       }
 
-      if (duration.indexOf("H") >= 0 && duration.indexOf("M") == -1) {
+      if (duration.indexOf('H') >= 0 && duration.indexOf('M') == -1) {
         a = [a[0], 0, a[1]];
       }
       if (
-        duration.indexOf("H") >= 0 &&
-        duration.indexOf("M") == -1 &&
-        duration.indexOf("S") == -1
+        duration.indexOf('H') >= 0 &&
+        duration.indexOf('M') == -1 &&
+        duration.indexOf('S') == -1
       ) {
         a = [a[0], 0, 0];
       }
@@ -150,9 +152,9 @@ export default {
       let m = Math.floor((duration % 3600) / 60);
       let s = Math.floor((duration % 3600) % 60);
 
-      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : "";
-      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : "00:";
-      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : "00";
+      let hDisplay = h > 0 ? (h < 10 ? `0${h} :` : `${h} :`) : '';
+      let mDisplay = m > 0 ? (m < 10 ? `0${m} :` : `${m} :`) : '00:';
+      let sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : '00';
       return hDisplay + mDisplay + sDisplay;
     },
     async getMoreData() {
@@ -170,7 +172,7 @@ export default {
             videoTitle: item.snippet.title,
             thumpnails: item.snippet.thumbnails,
             views: item.statistics.viewCount,
-            type: "video",
+            type: 'video',
           };
         });
         this.api.nextPageToken = response.nextPageToken;

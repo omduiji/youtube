@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <!-- <MainPage></MainPage> -->
-    <appHeader @getSearchParams="getParams" v-if="this.$route.name !== 'notFound'"></appHeader>
+    <appHeader
+      @getSearchParams="getParams"
+      v-if="this.$route.name !== 'notFound'"
+    ></appHeader>
     <router-view />
   </div>
 </template>
@@ -19,7 +22,7 @@ export default {
       orderFilter: '',
     };
   },
-  name: 'Home',
+  // name: 'Home',
   components: {
     // MainPage,
     appHeader,
