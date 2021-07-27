@@ -1,7 +1,8 @@
 <template>
   <div class="errorPage">
     <ErrorIcon></ErrorIcon>
-    <h1>{{ this.$route.params.status }}</h1>
+    <h1 v-if="this.$route.params.status">{{ this.$route.params.status }}</h1>
+    <h1 v-else>404</h1>
     <p v-if="this.$route.params.msg">{{ this.$route.params.msg }}</p>
     <p v-else>Page Not Found</p>
     <router-link to="/">Home</router-link>

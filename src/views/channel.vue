@@ -144,9 +144,7 @@ export default {
       res.map((r) => r.json())
     );
     this.channelData = channelData.items[0];
-    console.log(sections);
-    console.log(channelData.items[0], 'chdata');
-    // console.log(playlists);
+   
     this.Playlists = playlists.items.map((item) => {
       return {
         itemCount: item.contentDetails.itemCount,
@@ -172,7 +170,6 @@ export default {
         description: item.snippet.description,
       };
     });
-    // console.log(this.Playlists, "playlists");
     this.playlistToken = playlists.nextPageToken;
     this.searchToken = searching.nextPageToken;
     this.loaderCompStatus = false;

@@ -224,6 +224,7 @@ export default {
         // console.log(this.relatedVideos, 'playlist videos');
       } catch (err) {
         console.log(err);
+        this.$router.push({ name: 'notFound' });
       }
     },
     async getPlaylistVideos() {
@@ -291,6 +292,7 @@ export default {
         console.log(this.relatedVideos, 'scrolled');
       } catch (err) {
         console.log(err);
+        this.$router.push({ name: 'notFound' });
       }
       this.loaderCompStatus = true;
     },
@@ -315,6 +317,7 @@ export default {
         });
       } catch (err) {
         console.log(err);
+        this.$router.push({ name: 'notFound' });
       }
       return relatedVideos;
     },

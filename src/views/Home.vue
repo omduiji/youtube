@@ -97,10 +97,10 @@ export default {
           return;
         }
         let response = await list.json();
-        console.log(response, 'ssss');
+        // console.log(response, 'ssss');
         return response;
       } catch (err) {
-        console.log(err, 'ooooo');
+        // console.log(err, 'ooooo');
         this.$router.push({ name: 'notFound' });
       }
     },
@@ -179,6 +179,7 @@ export default {
         this.videosList = [...this.videosList, ...hydratedArray];
       } catch (err) {
         console.log(err);
+        this.$router.push({ name: 'notFound' });
       }
       this.loaderCompStatus = true;
     },
